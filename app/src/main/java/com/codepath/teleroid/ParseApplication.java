@@ -4,7 +4,7 @@ import android.app.Application;
 
 import com.parse.Parse;
 
-import okhttp3.OkHttpClient; -
+import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 
 public class ParseApplication extends Application {
