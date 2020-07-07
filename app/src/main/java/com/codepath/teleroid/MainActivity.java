@@ -61,11 +61,9 @@ public class MainActivity extends AppCompatActivity {
                 Fragment fragment;
                 switch (item.getItemId()) {
                     case R.id.actionHome:
-                        Toast.makeText(MainActivity.this, "Home!", Toast.LENGTH_SHORT).show();
-                        fragment = new HomeFragment(); //TODO: create appropriate Home fragment
+                        fragment = new HomeFragment();
                         break;
                     case R.id.actionCreate:
-                        Toast.makeText(MainActivity.this, "Create!", Toast.LENGTH_SHORT).show();
                         fragment = new CreateFragment();
                         break;
                     case R.id.actionProfile:
@@ -74,8 +72,7 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     default:
                         bottomMenu.setSelectedItemId(R.id.actionHome);
-                        fragment = new CreateFragment(); //TODO: better logic for defaul case.
-                        Toast.makeText(MainActivity.this, "Default: Home?", Toast.LENGTH_SHORT).show();
+                        fragment = new CreateFragment(); //TODO: better logic for default case.
                         break;
                 }
                 fragmentManager.beginTransaction().replace(binding.frameContainer.getId(), fragment).commit();
