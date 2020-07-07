@@ -1,8 +1,10 @@
 package com.codepath.teleroid;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
+import androidx.fragment.app.Fragment;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -14,12 +16,14 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.codepath.teleroid.databinding.ActivityMainBinding;
 import com.codepath.teleroid.models.Post;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
@@ -37,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
     public static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 32; //arbitrary
 
     private ActivityMainBinding binding;
+    private BottomNavigationView bottomMenu;
     private File photoFile;
 
     @Override
@@ -45,6 +50,31 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         View loginView = binding.getRoot();
         setContentView(loginView);
+        bottomMenu = binding.bottomMenu;
+
+        bottomMenu.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                Fragment fragment;
+                switch (item.getItemId()) {
+                    case R.id.actionHome:
+                        Toast.makeText(MainActivity.this, "Home!", Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.actionCreate:
+                        Toast.makeText(MainActivity.this, "Create!", Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.actionProfile:
+                        Toast.makeText(MainActivity.this, "Profile!", Toast.LENGTH_SHORT).show();
+                        break;
+                    default:
+                        bottomMenu.setSelectedItemId(R.id.actionHome);
+                        Toast.makeText(MainActivity.this, "Default: Home?", Toast.LENGTH_SHORT).show();
+                        break;
+                }
+                //fragmentManager.beginTransaction().replace(R.id.flContainer, fragment).commit();
+                return true;
+            }
+        });
 
         binding.captureButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -52,7 +82,6 @@ public class MainActivity extends AppCompatActivity {
                 launchCamera(view);
             }
         });
-
 
         binding.postButton.setOnClickListener(new View.OnClickListener() {
             @Override
