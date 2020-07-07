@@ -1,4 +1,4 @@
-package com.codepath.teleroid.ui.login;
+package com.codepath.teleroid.login;
 
 import android.content.Intent;
 import android.os.Bundle;

@@ -9,12 +9,12 @@ import com.parse.ParseUser;
 public class Post extends ParseObject {
 
     //Keys for the names of each of the attributes of the Parse entity.
-    private static final String KEY_DESCRIPTION = "description";
-    private static final String KEY_IMAGE = "image";
-    private static final String KEY_USER = "user";
+    public static final String KEY_CAPTION = "caption";
+    public static final String KEY_IMAGE = "image";
+    public static final String KEY_USER = "user";
 
-    public String getDescription(){
-        return getString(KEY_DESCRIPTION);
+    public String getCaption(){
+        return getString(KEY_CAPTION);
     }
 
     public ParseFile getImage(){
@@ -25,8 +25,8 @@ public class Post extends ParseObject {
         return getParseUser(KEY_USER);
     }
 
-    public void setDescription(String description){
-        put(KEY_DESCRIPTION, description);
+    public void setCaption(String caption){
+        put(KEY_CAPTION, caption);
     }
 
     public void setImage(ParseFile file){
