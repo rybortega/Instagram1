@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<paths>
+    <!-- Grants access to the application to the specific external storage directory for pictures-->
+    <external-files-path
+        name="images"
+        path="Pictures" />
+
+</paths>

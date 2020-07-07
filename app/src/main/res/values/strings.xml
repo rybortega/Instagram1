@@ -11,4 +11,5 @@
     <string name="login_failed">"Login failed"</string>
     <string name="caption">Write a caption...</string>
     <string name="post">Post</string>
+    <string name="capture">Take Photo</string>
 </resources>
