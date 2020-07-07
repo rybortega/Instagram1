@@ -55,19 +55,10 @@ public class CreateFragment extends Fragment {
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentCreateBinding.inflate(getLayoutInflater(), container, false);
-
-        // layout of fragment is stored in a special property called root
         View view = binding.getRoot();
-
         return view;
     }
 
@@ -118,24 +109,6 @@ public class CreateFragment extends Fragment {
             }
         });
 
-    }
-
-    private void queryPosts() {
-        ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
-        query.include(Post.KEY_USER);
-        query.findInBackground(new FindCallback<Post>() {
-            @Override
-            public void done(List<Post> posts, ParseException e) {
-                if (e != null) {
-                    Log.e(TAG, "Couldn't query posts: " + e);
-                    return;
-                }
-                for (Post post : posts) {
-                    Log.i(TAG, "Post retrieved successfully: '" + post.getCaption()
-                            + "', by username: " + post.getUser().getUsername());
-                }
-            }
-        });
     }
 
     /**

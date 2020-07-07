@@ -24,6 +24,7 @@ import android.widget.Toast;
 
 import com.codepath.teleroid.databinding.ActivityMainBinding;
 import com.codepath.teleroid.fragments.CreateFragment;
+import com.codepath.teleroid.fragments.HomeFragment;
 import com.codepath.teleroid.models.Post;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.parse.FindCallback;
@@ -38,6 +39,8 @@ import java.io.IOException;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
+
+    private static final String TAG = MainActivity.class.getSimpleName(); //logging purposes
 
     private ActivityMainBinding binding;
     private BottomNavigationView bottomMenu;
@@ -59,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
                 switch (item.getItemId()) {
                     case R.id.actionHome:
                         Toast.makeText(MainActivity.this, "Home!", Toast.LENGTH_SHORT).show();
-                        fragment = new CreateFragment(); //TODO: create appropriate Home fragment
+                        fragment = new HomeFragment(); //TODO: create appropriate Home fragment
                         break;
                     case R.id.actionCreate:
                         Toast.makeText(MainActivity.this, "Create!", Toast.LENGTH_SHORT).show();
