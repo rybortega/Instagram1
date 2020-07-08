@@ -9,21 +9,28 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.codepath.teleroid.R;
+import com.codepath.teleroid.databinding.ItemMinimalPostBinding;
 import com.codepath.teleroid.databinding.ItemPostBinding;
 import com.codepath.teleroid.models.Post;
 import com.parse.ParseFile;
 
 import java.util.List;
 
-public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> {
+public class MinimalPostsAdapter extends RecyclerView.Adapter<MinimalPostsAdapter.ViewHolder> {
 
-    private Context context;
-    private List<Post> posts;
+    protected Context context;
+    protected List<Post> posts;
 
-    public PostsAdapter(Context context, List<Post> posts){
+    private OnClickListener clickListener;
+
+    public interface  OnClickListener{
+        void onItemClick(int position);
+    }
+
+    public MinimalPostsAdapter(Context context, List<Post> posts, OnClickListener clickListener){
         this.context = context;
         this.posts = posts;
+        this.clickListener = clickListener;
     }
 
     // Clean all elements of the recycler
@@ -35,7 +42,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        ItemPostBinding binding = ItemPostBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+        ItemMinimalPostBinding binding = ItemMinimalPostBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
         return new ViewHolder(binding);
     }
 
@@ -52,23 +59,31 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
 
     class ViewHolder extends RecyclerView.ViewHolder{
 
-        ItemPostBinding binding;
+        ItemMinimalPostBinding binding;
 
-        public ViewHolder(@NonNull ItemPostBinding binding){
+        public ViewHolder(@NonNull ItemMinimalPostBinding binding){
             super(binding.getRoot());
             this.binding = binding;
         }
 
         public void bind(Post post){
-            binding.postCaption.setText(post.getCaption());
-            binding.profileHandle.setText(post.getUser().getUsername());
-
             ParseFile image = post.getImage();
             if(image != null){
                 Glide.with(context)
                         .load(post.getImage().getUrl())
                         .into(binding.postPhoto);
             }
+
+            //LISTENERS
+            //Post item itself
+            binding.postPreview.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    /*Sets listener on actual tweet item -> get position
+                    and initiate detail-activity from timeline*/
+                    clickListener.onItemClick(getAdapterPosition());
+                }
+            });
         }
     }
 }

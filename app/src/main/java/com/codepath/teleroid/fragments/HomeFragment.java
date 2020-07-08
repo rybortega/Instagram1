@@ -14,8 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.codepath.teleroid.R;
-import com.codepath.teleroid.adapters.PostsAdapter;
-import com.codepath.teleroid.databinding.FragmentCreateBinding;
+import com.codepath.teleroid.adapters.DetailedPostsAdapter;
 import com.codepath.teleroid.databinding.FragmentHomeBinding;
 import com.codepath.teleroid.models.Post;
 import com.parse.FindCallback;
@@ -32,10 +31,10 @@ public class HomeFragment extends Fragment {
 
     public static final String TAG = HomeFragment.class.getSimpleName(); //logging purposes
 
-    private FragmentHomeBinding binding;
+    protected FragmentHomeBinding binding;
 
     protected List<Post> posts;
-    protected PostsAdapter adapter;
+    private DetailedPostsAdapter detailedPostsAdapter;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -54,9 +53,9 @@ public class HomeFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         posts = new ArrayList<>();
-        adapter = new PostsAdapter(getContext(), posts);
+        detailedPostsAdapter = new DetailedPostsAdapter(getContext(), posts);
 
-        binding.postsRecycler.setAdapter(adapter);
+        binding.postsRecycler.setAdapter(detailedPostsAdapter);
         binding.postsRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
 
         queryPosts();
@@ -96,9 +95,9 @@ public class HomeFragment extends Fragment {
                     return;
                 }
                 Log.i(TAG, "Posts retrieved successfully!");
-                adapter.clear();
+                detailedPostsAdapter.clear();
                 posts.addAll(newPosts);
-                adapter.notifyDataSetChanged();
+                detailedPostsAdapter.notifyDataSetChanged();
             }
         });
     }

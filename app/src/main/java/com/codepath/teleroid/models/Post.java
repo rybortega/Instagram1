@@ -5,7 +5,10 @@ import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
 
+import org.parceler.Parcel;
+
 @ParseClassName("Post") //Matches the name of the Parse entity
+@Parcel(analyze={Post.class})
 public class Post extends ParseObject {
 
     //Keys for the names of each of the attributes of the Parse entity.
@@ -13,6 +16,10 @@ public class Post extends ParseObject {
     public static final String KEY_IMAGE = "image";
     public static final String KEY_USER = "user";
     public static final String KEY_TIME = "createdAt";
+
+    public  Post(){
+        //empty constructor needed by Parceler
+    }
 
     public String getCaption(){
         return getString(KEY_CAPTION);
