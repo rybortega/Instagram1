@@ -1,27 +1,16 @@
 package com.codepath.teleroid;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
-import android.media.ExifInterface;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.codepath.teleroid.databinding.ActivityMainBinding;
@@ -29,20 +18,10 @@ import com.codepath.teleroid.fragments.CreateFragment;
 import com.codepath.teleroid.fragments.HomeFragment;
 import com.codepath.teleroid.fragments.ProfileFragment;
 import com.codepath.teleroid.login.LoginActivity;
-import com.codepath.teleroid.models.Post;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.parse.FindCallback;
-import com.parse.LogInCallback;
 import com.parse.LogOutCallback;
 import com.parse.ParseException;
-import com.parse.ParseFile;
-import com.parse.ParseQuery;
 import com.parse.ParseUser;
-import com.parse.SaveCallback;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -60,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
         View mainView = binding.getRoot();
         setContentView(mainView);
         setSupportActionBar(binding.toolbar);
-        bottomMenu = binding.bottomMenu;
+        bottomMenu = findViewById(R.id.bottom_toolbar);
 
         //Bottom Menu options listener
         bottomMenu.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -87,14 +66,14 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         // Set default selection
-        binding.bottomMenu.setSelectedItemId(R.id.actionHome);
+        bottomMenu.setSelectedItemId(R.id.actionHome);
     }
 
     // Inflation of Menu icons for toolbar and setup of listeners;
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main_toolbar, menu);
+        getMenuInflater().inflate(R.menu.menu_top_navigation, menu);
         return true;
     }
     @Override

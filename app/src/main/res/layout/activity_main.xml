@@ -15,7 +15,7 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:background="@android:color/white"
-        app:menu="@menu/main_toolbar">
+        app:menu="@menu/menu_top_navigation">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -40,14 +40,13 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/toolbar"
-        android:layout_above="@id/bottomMenu"/>
+        android:layout_above="@id/bottom_toolbar"/>
 
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottomMenu"
+    <include
+        layout="@layout/toolbar_bottom"
+        android:id="@+id/bottom_toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:background="#FFFFFF"
-        app:menu="@menu/menu_bottom_navigation" />
+        android:layout_alignParentBottom="true"/>
 
 </RelativeLayout>

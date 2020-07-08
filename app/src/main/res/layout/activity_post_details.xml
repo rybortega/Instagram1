@@ -11,9 +11,10 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:paddingTop="8dp"
-        android:id="@+id/itemContainer">
+        android:id="@+id/postContainer"
+        android:layout_above="@id/bottom_toolbar">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -124,5 +125,12 @@
             android:textSize="14dp" />
 
     </RelativeLayout>
+
+    <include
+        layout="@layout/toolbar_bottom"
+        android:id="@+id/bottom_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"/>
 
 </RelativeLayout>
