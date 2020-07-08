@@ -19,6 +19,7 @@ import com.codepath.teleroid.fragments.ProfileFragment;
 import com.codepath.teleroid.models.Post;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.parse.ParseFile;
+import com.parse.ParseUser;
 
 import org.parceler.Parcels;
 
@@ -55,7 +56,7 @@ public class PostDetailsActivity extends AppCompatActivity {
                         fragment = new CreateFragment();
                         break;
                     case R.id.actionProfile:
-                        fragment = new ProfileFragment();
+                        fragment = new ProfileFragment(ParseUser.getCurrentUser());
                         break;
                     default:
                         bottomMenu.setSelectedItemId(R.id.actionHome);

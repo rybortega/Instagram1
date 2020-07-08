@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
                         fragment = new CreateFragment();
                         break;
                     case R.id.actionProfile:
-                        fragment = new ProfileFragment();
+                        fragment = new ProfileFragment(ParseUser.getCurrentUser());
                         break;
                     default:
                         bottomMenu.setSelectedItemId(R.id.actionHome);

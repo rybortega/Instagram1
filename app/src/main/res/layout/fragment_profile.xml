@@ -85,8 +85,8 @@
                     android:layout_below="@id/displayName"
                     tools:text="@tools:sample/lorem[10]"
                     android:paddingHorizontal="8dp"
-                    android:maxLines="3" />
-
+                    android:maxLines="3"
+                    android:inputType="textMultiLine"/>
 
             </RelativeLayout>
 

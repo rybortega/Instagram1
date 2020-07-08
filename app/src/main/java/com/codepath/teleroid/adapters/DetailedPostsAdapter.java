@@ -64,7 +64,7 @@ public class DetailedPostsAdapter extends RecyclerView.Adapter<DetailedPostsAdap
             ParseFile image = post.getImage();
             if(image != null){
                 Glide.with(context)
-                        .load(post.getImage().getUrl())
+                        .load(image.getUrl())
                         .into(binding.postPhoto);
             }
         }

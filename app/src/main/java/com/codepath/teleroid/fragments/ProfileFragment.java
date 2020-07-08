@@ -13,13 +13,16 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.bumptech.glide.Glide;
 import com.codepath.teleroid.PostDetailsActivity;
 import com.codepath.teleroid.R;
 import com.codepath.teleroid.adapters.MinimalPostsAdapter;
 import com.codepath.teleroid.databinding.FragmentProfileBinding;
 import com.codepath.teleroid.models.Post;
 import com.parse.FindCallback;
+import com.parse.Parse;
 import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
@@ -37,6 +40,12 @@ public class ProfileFragment extends Fragment {
     protected List<Post> posts;
     private MinimalPostsAdapter minimalPostsAdapter;
     private int lastVisitedPost;
+
+    private ParseUser profileOwnerUser;
+
+    public ProfileFragment(ParseUser profileOwnerUser){
+        this.profileOwnerUser = profileOwnerUser;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -104,14 +113,43 @@ public class ProfileFragment extends Fragment {
         });
     }
 
+    /**
+     * Binds data queried from Parse pertaining to the user to the views in the fragment.
+     * @param user
+     */
     private void bindProfileOwner(ParseUser user) {
-        binding.displayName.setText(user.getUsername());
+        //Profile Pic
+        ParseFile profilePicture = user.getParseFile("profilePicture");
+        try{
+            Glide.with(getContext())
+                    .load(profilePicture.getUrl())
+                    .circleCrop()
+                    .into(binding.profilePicture);
+        }
+        catch (Exception e){
+            Log.e(TAG, "Error fetching profile picture");
+            binding.profilePicture.setBackgroundResource(R.drawable.default_profile_picture);
+        }
+
+        //Display Name
+        String displayName = user.getString("name");
+        if(displayName == null){
+            displayName = user.getUsername();
+        }
+        binding.displayName.setText(displayName);
+
+        //Bio
+        String userBio = user.getString("biography");
+        if(userBio == null){
+            userBio = "";
+        }
+            binding.displayBio.setText(userBio);
     }
 
     protected void queryPosts() {
         ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
         query.include(Post.KEY_USER);
-        query.whereEqualTo(Post.KEY_USER, ParseUser.getCurrentUser());
+        query.whereEqualTo(Post.KEY_USER, profileOwnerUser);
         query.setLimit(20); //Limits number of results.
         query.addDescendingOrder(Post.KEY_TIME);
         query.findInBackground(new FindCallback<Post>() {
