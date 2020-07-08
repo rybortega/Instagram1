@@ -31,9 +31,9 @@ public class HomeFragment extends Fragment {
 
     public static final String TAG = HomeFragment.class.getSimpleName(); //logging purposes
 
-    protected FragmentHomeBinding binding;
+    private FragmentHomeBinding binding;
 
-    protected List<Post> posts;
+    private List<Post> posts;
     private DetailedPostsAdapter detailedPostsAdapter;
 
     public HomeFragment() {

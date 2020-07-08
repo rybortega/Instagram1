@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.bumptech.glide.Glide;
 import com.codepath.teleroid.databinding.ActivityMainBinding;
 import com.codepath.teleroid.databinding.ActivityPostDetailsBinding;
 import com.codepath.teleroid.fragments.CreateFragment;
@@ -17,6 +18,7 @@ import com.codepath.teleroid.fragments.HomeFragment;
 import com.codepath.teleroid.fragments.ProfileFragment;
 import com.codepath.teleroid.models.Post;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.parse.ParseFile;
 
 import org.parceler.Parcels;
 
@@ -26,7 +28,6 @@ public class PostDetailsActivity extends AppCompatActivity {
 
     private ActivityPostDetailsBinding binding;
     private BottomNavigationView bottomMenu;
-
 
     private Post selectedPost;
 
@@ -69,6 +70,17 @@ public class PostDetailsActivity extends AppCompatActivity {
         //Getting parcel delivered from last Activity
         selectedPost = (Post) Parcels.unwrap(getIntent().getParcelableExtra("post_object"));
         Log.d(TAG, "Showing details for: " + selectedPost.getCaption());
+
+        //Setting Views to corresponding post
+        binding.postCaption.setText(selectedPost.getCaption());
+        binding.profileHandle.setText(selectedPost.getUser().getUsername());
+
+        ParseFile image = selectedPost.getImage();
+        if(image != null){
+            Glide.with(this)
+                    .load(selectedPost.getImage().getUrl())
+                    .into(binding.postPhoto);
+        }
 
     }
 }
