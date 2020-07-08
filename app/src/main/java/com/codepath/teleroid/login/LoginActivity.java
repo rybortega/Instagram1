@@ -1,5 +1,6 @@
 package com.codepath.teleroid.login;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,12 +14,14 @@ import com.codepath.teleroid.databinding.ActivityLoginBinding;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
+import com.parse.SignUpCallback;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private static final String TAG = LoginActivity.class.getSimpleName(); //logging purposes
+    public static final String TAG = LoginActivity.class.getSimpleName(); //logging purposes
 
     private ActivityLoginBinding binding;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -36,14 +39,26 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Log.i(TAG, "Button Press: Login Attempt");
+                try{
+                    String username = binding.usernameField.getText().toString();
+                    String password = binding.passwordField.getText().toString();
 
-                String username = binding.usernameField.getText().toString();
-                String password = binding.passwordField.getText().toString();
-
-                loginUser(username, password);
+                    loginUser(username, password);
+                }
+                catch (Exception e){
+                    Log.e(TAG, "Error initiating login: " + e);
+                }
             }
         });
 
+        binding.signupButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.i(TAG, "Button Press: Intent to Register");
+                startRegisterActivity();
+                //TODO: finish this LoginActivity only after user is inside MainActivity
+            }
+        });
     }
 
     private void loginUser(String username, String password) {
@@ -64,6 +79,11 @@ public class LoginActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    private void startRegisterActivity() {
+        Intent registerActivity = new Intent(this, RegisterActivity.class);
+        startActivity(registerActivity);
     }
 
     private void startMainActivity() {
