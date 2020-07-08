@@ -51,12 +51,12 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        binding.signupButton.setOnClickListener(new View.OnClickListener() {
+        binding.registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.i(TAG, "Button Press: Intent to Register");
+                Log.i(TAG, "Button Press: Starting intent to register");
                 startRegisterActivity();
-                //TODO: finish this LoginActivity only after user is inside MainActivity
+                finish();
             }
         });
     }

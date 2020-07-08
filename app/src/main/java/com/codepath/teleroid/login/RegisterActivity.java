@@ -2,6 +2,7 @@ package com.codepath.teleroid.login;
 
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -51,6 +52,15 @@ public class RegisterActivity extends AppCompatActivity {
                 }
             }
         });
+
+        binding.signupButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.i(TAG, "Button Press: Starting intent to login");
+                startLoginActivity();
+                finish();
+            }
+        });
     }
 
     private void registerUser(final String username, final String password){
@@ -65,7 +75,9 @@ public class RegisterActivity extends AppCompatActivity {
             public void done(ParseException e) {
                 if (e == null) {
                     progressDialog.dismiss();
-                    alertDisplayer("Register Successful", "User: " + username);
+                    alertDisplayer("Register Successful", "Please login to " + username);
+                    startLoginActivity();
+                    finish();
                 } else {
                     progressDialog.dismiss();
                     alertDisplayer("Registration Fail", e.getMessage()+" Please Try Again");
@@ -86,5 +98,10 @@ public class RegisterActivity extends AppCompatActivity {
                 });
         AlertDialog ok = builder.create();
         ok.show();
+    }
+
+    private void startLoginActivity() {
+        Intent loginActivity = new Intent(this, LoginActivity.class);
+        startActivity(loginActivity);
     }
 }

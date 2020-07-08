@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -59,6 +60,27 @@ public class HomeFragment extends Fragment {
         binding.postsRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
 
         queryPosts();
+
+        //Swipe Refresh loading indicator colors
+        binding.swipeRefreshContainer.setColorSchemeResources(
+                R.color.colorAccent,
+                R.color.colorPrimary,
+                R.color.colorPrimaryDark,
+                R.color.colorSecondary);
+
+        //Swipe Refresh listener
+        binding.swipeRefreshContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                Log.d(TAG, "Refresh: Fetching fresh data!");
+
+                //Clears and repopulates
+                queryPosts();
+
+                //Turn off the reload signal
+                binding.swipeRefreshContainer.setRefreshing(false);
+            }
+        });
     }
 
     protected void queryPosts() {
@@ -74,6 +96,7 @@ public class HomeFragment extends Fragment {
                     return;
                 }
                 Log.i(TAG, "Posts retrieved successfully!");
+                adapter.clear();
                 posts.addAll(newPosts);
                 adapter.notifyDataSetChanged();
             }

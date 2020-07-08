@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -61,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(binding.toolbar);
         bottomMenu = binding.bottomMenu;
 
+        //Bottom Menu options listener
         bottomMenu.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -88,6 +90,26 @@ public class MainActivity extends AppCompatActivity {
         binding.bottomMenu.setSelectedItemId(R.id.actionHome);
     }
 
+    // Inflation of Menu icons for toolbar and setup of listeners;
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.main_toolbar, menu);
+        return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle presses on the action bar items
+        switch (item.getItemId()) {
+            case R.id.logoutButton:
+                logoutUser();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    //LOGOUT
     private void logoutUser() {
         final String logoutMessage = "Logged out from " + ParseUser.getCurrentUser().getUsername();
         Log.i(TAG, "Logging out user...");
@@ -110,26 +132,6 @@ public class MainActivity extends AppCompatActivity {
     private void backToLoginActivity() {
         Intent loginActivity = new Intent(this, LoginActivity.class);
         startActivity(loginActivity);
-    }
-
-    // Inflation of Menu icons for toolbar;
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main_toolbar, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle presses on the action bar items
-        switch (item.getItemId()) {
-            case R.id.logoutButton:
-                logoutUser();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
     }
 }
 

@@ -80,7 +80,7 @@
             android:text="@string/no_account" />
 
         <TextView
-            android:id="@+id/signupButton"
+            android:id="@+id/registerButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/noAccountPrompt"
