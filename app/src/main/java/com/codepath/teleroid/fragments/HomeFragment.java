@@ -29,12 +29,12 @@ import java.util.List;
  */
 public class HomeFragment extends Fragment {
 
-    private static final String TAG = HomeFragment.class.getSimpleName(); //logging purposes
+    public static final String TAG = HomeFragment.class.getSimpleName(); //logging purposes
 
     private FragmentHomeBinding binding;
 
-    private List<Post> posts;
-    private PostsAdapter adapter;
+    protected List<Post> posts;
+    protected PostsAdapter adapter;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -61,7 +61,7 @@ public class HomeFragment extends Fragment {
         queryPosts();
     }
 
-    private void queryPosts() {
+    protected void queryPosts() {
         ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
         query.include(Post.KEY_USER);
         query.setLimit(20); //Limits number of results.

@@ -17,6 +17,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -25,9 +26,13 @@ import android.widget.Toast;
 import com.codepath.teleroid.databinding.ActivityMainBinding;
 import com.codepath.teleroid.fragments.CreateFragment;
 import com.codepath.teleroid.fragments.HomeFragment;
+import com.codepath.teleroid.fragments.ProfileFragment;
+import com.codepath.teleroid.login.LoginActivity;
 import com.codepath.teleroid.models.Post;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.parse.FindCallback;
+import com.parse.LogInCallback;
+import com.parse.LogOutCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseQuery;
@@ -40,7 +45,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final String TAG = MainActivity.class.getSimpleName(); //logging purposes
+    public static final String TAG = MainActivity.class.getSimpleName(); //logging purposes
 
     private ActivityMainBinding binding;
     private BottomNavigationView bottomMenu;
@@ -53,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         View mainView = binding.getRoot();
         setContentView(mainView);
+        setSupportActionBar(binding.toolbar);
         bottomMenu = binding.bottomMenu;
 
         bottomMenu.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -67,8 +73,7 @@ public class MainActivity extends AppCompatActivity {
                         fragment = new CreateFragment();
                         break;
                     case R.id.actionProfile:
-                        Toast.makeText(MainActivity.this, "Profile!", Toast.LENGTH_SHORT).show();
-                        fragment = new CreateFragment(); //TODO: create appropriate Profile fragment
+                        fragment = new ProfileFragment();
                         break;
                     default:
                         bottomMenu.setSelectedItemId(R.id.actionHome);
@@ -81,6 +86,50 @@ public class MainActivity extends AppCompatActivity {
         });
         // Set default selection
         binding.bottomMenu.setSelectedItemId(R.id.actionHome);
+    }
+
+    private void logoutUser() {
+        final String logoutMessage = "Logged out from " + ParseUser.getCurrentUser().getUsername();
+        Log.i(TAG, "Logging out user...");
+        ParseUser.logOutInBackground(new LogOutCallback() {
+            @Override
+            public void done(ParseException e) {
+                if (e != null){
+                    Log.e(TAG, "Error in login: ", e);
+                    Toast.makeText(MainActivity.this, "Error logging out", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                //On successful login
+                Toast.makeText(MainActivity.this, logoutMessage, Toast.LENGTH_SHORT).show();
+                backToLoginActivity();
+                finish();
+            }
+        });
+    }
+
+    private void backToLoginActivity() {
+        Intent loginActivity = new Intent(this, LoginActivity.class);
+        startActivity(loginActivity);
+    }
+
+    // Inflation of Menu icons for toolbar;
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.main_toolbar, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle presses on the action bar items
+        switch (item.getItemId()) {
+            case R.id.logoutButton:
+                logoutUser();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }
 

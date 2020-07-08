@@ -44,7 +44,7 @@
     <ImageView
         android:id="@+id/postPhoto"
         android:layout_width="match_parent"
-        android:layout_height="400dp"
+        android:layout_height="wrap_content"
         tools:src="@tools:sample/avatars"
         android:layout_below="@id/userContainer"/>
 

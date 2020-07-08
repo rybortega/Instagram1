@@ -44,7 +44,7 @@ import static android.app.Activity.RESULT_OK;
  */
 public class CreateFragment extends Fragment {
 
-    private static final String TAG = CreateFragment.class.getSimpleName(); //logging purposes
+    public static final String TAG = CreateFragment.class.getSimpleName(); //logging purposes
     public static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 32; //arbitrary
 
     private FragmentCreateBinding binding;
