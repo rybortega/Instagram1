@@ -1,14 +1,23 @@
 package com.codepath.teleroid.fragments;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.media.ExifInterface;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -19,16 +28,22 @@ import com.codepath.teleroid.R;
 import com.codepath.teleroid.adapters.PreviewPostsAdapter;
 import com.codepath.teleroid.databinding.FragmentProfileBinding;
 import com.codepath.teleroid.models.Post;
+import com.codepath.teleroid.utilities.BitmapManipulations;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
 import org.parceler.Parcels;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import static android.app.Activity.RESULT_OK;
 
 public class ProfileFragment extends Fragment {
 
@@ -39,6 +54,7 @@ public class ProfileFragment extends Fragment {
     protected List<Post> posts;
     private PreviewPostsAdapter previewPostsAdapter;
     private int lastVisitedPost;
+    private  File profilePictureFile;
 
     private ParseUser profileOwnerUser;
 
@@ -110,6 +126,16 @@ public class ProfileFragment extends Fragment {
                 binding.swipeRefreshContainer.setRefreshing(false);
             }
         });
+
+        if(profileOwnerUser == ParseUser.getCurrentUser()){
+            binding.profilePicture.setClickable(true);
+            binding.profilePicture.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    launchCamera();
+                }
+            });
+        }
     }
 
     /**
@@ -166,6 +192,89 @@ public class ProfileFragment extends Fragment {
                 posts.clear();
                 posts.addAll(newPosts);
                 previewPostsAdapter.notifyDataSetChanged();
+            }
+        });
+    }
+
+    private void launchCamera() {
+        // create Intent to take a picture and return control to the calling application
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        // Create a File reference for future access
+        String profilePictureFileName = "photo.jpg";
+        profilePictureFile = getPhotoFileUri(profilePictureFileName);
+
+        // wrap File object into a content provider
+        // required for API >= 24
+        // See https://guides.codepath.com/android/Sharing-Content-with-Intents#sharing-files-with-api-24-or-higher
+        Uri fileProvider = FileProvider.getUriForFile(getContext(), "com.codepath.fileprovider", profilePictureFile);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, fileProvider);
+
+        // If you call startActivityForResult() using an intent that no app can handle, your app will crash.
+        // So as long as the result is not null, it's safe to use the intent.
+        if (intent.resolveActivity(getContext().getPackageManager()) != null) {
+            // Start the image capture intent to take photo
+            startActivityForResult(intent, CreateFragment.CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
+        }
+        else {
+            Log.e(TAG, "No available camera app");
+        }
+    }
+
+    /**
+     * Helper method to get the identifier of the captured image.
+     * @Return the File for a photo stored on disk given the fileName
+     */
+    public File getPhotoFileUri(String fileName) {
+        // Get safe storage directory for photos
+        // Use `getExternalFilesDir` on Context to access package-specific directories.
+        // This way, we don't need to request external read/write runtime permissions.
+        File mediaStorageDir = new File(getContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES), TAG);
+
+        // Create the storage directory if it does not exist
+        if (!mediaStorageDir.exists() && !mediaStorageDir.mkdirs()) {
+            Log.d(TAG, "failed to create directory");
+        }
+
+        // Return the file target for the photo based on filename
+        String pathName = mediaStorageDir.getPath() + File.separator + fileName;
+        File file = new File(pathName);
+
+        return file;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == CreateFragment.CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
+                //TODO: Resize picture before setting it.
+                setNewProfilePicture(profileOwnerUser, new ParseFile(profilePictureFile));
+
+            } else { // Result was a failure
+                Log.i(TAG, "Picture wasn't taken!");
+            }
+        }
+    }
+
+    private void setNewProfilePicture(final ParseUser user, ParseFile newProfilePicture) {
+        user.put("profilePicture", newProfilePicture);
+        user.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if (e != null) {
+                    Log.e(TAG, "Error in saving: " + e);
+                    Toast.makeText(getContext(), "Posting Error", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                Log.i(TAG, "Profile picture updated!");
+
+                // Load the new image (now in our DB) as the profile picture
+                ParseFile nowSetProfilePicture = user.getParseFile("profilePicture");
+                Glide.with(getContext())
+                        .load(nowSetProfilePicture.getUrl())
+                        .circleCrop()
+                        .placeholder(R.drawable.default_profile_picture)
+                        .into(binding.profilePicture);
             }
         });
     }

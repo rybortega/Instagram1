@@ -69,7 +69,7 @@ public class CreateFragment extends Fragment {
         binding.captureButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                launchCamera(view);
+                launchCamera();
             }
         });
 
@@ -108,14 +108,13 @@ public class CreateFragment extends Fragment {
                 binding.newPhoto.setImageResource(0);
             }
         });
-
     }
 
     /**
      * Implicit intent to launch camera application.
      * Outputs taken picture into fileProvider.
      */
-    public void launchCamera(View view) {
+    public void launchCamera() {
         // create Intent to take a picture and return control to the calling application
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         // Create a File reference for future access
