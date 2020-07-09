@@ -1,5 +1,6 @@
 package com.codepath.teleroid.fragments;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -24,7 +25,9 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.codepath.teleroid.databinding.FragmentCreateBinding;
+import com.codepath.teleroid.login.RegisterActivity;
 import com.codepath.teleroid.models.Post;
+import com.codepath.teleroid.utilities.AlertUtilities;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
@@ -47,6 +50,7 @@ public class CreateFragment extends Fragment {
 
 
     private FragmentCreateBinding binding;
+    private ProgressDialog progressDialog;
     private File photoFile;
 
     public CreateFragment() {
@@ -64,6 +68,9 @@ public class CreateFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        progressDialog = new ProgressDialog(getContext());
+
         binding.captureButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -83,9 +90,13 @@ public class CreateFragment extends Fragment {
             public void onClick(View view) {
                 if (photoFile == null || binding.newPhoto.getDrawable() == null){
                     Log.e(TAG, "Attempt to post invalid image");
-                    Toast.makeText(getContext(), "No image selected", Toast.LENGTH_SHORT);
+                    AlertUtilities.alertDisplayer("Invalid Post", "Please add a photo to create a new post", getContext());
+
                     return;
                 }
+                progressDialog.setMessage("Please Wait");
+                progressDialog.setTitle("Submitting Post");
+                progressDialog.show();
                 String description = binding.captionField.getText().toString();
                 ParseUser currentUser = ParseUser.getCurrentUser();
                 savePost(description, currentUser, photoFile);
@@ -103,11 +114,18 @@ public class CreateFragment extends Fragment {
             public void done(ParseException e) {
                 if (e != null) {
                     Log.e(TAG, "Error in saving: " + e);
-                    Toast.makeText(getContext(), "Posting Error", Toast.LENGTH_SHORT).show();
+
+                    //Notify user
+                    progressDialog.dismiss();
+                    AlertUtilities.alertDisplayer("Post failed", "The image failed to upload. Please try again later.", getContext());
+
                     return;
                 }
                 Log.i(TAG, "Photo posted successfully");
 
+                //Notify user
+                progressDialog.dismiss();
+                AlertUtilities.alertDisplayer("Posted Successful", "Your image has been posted!", getContext());
                 //Clean UI
                 binding.captionField.setText("");
                 binding.newPhoto.setImageResource(0);

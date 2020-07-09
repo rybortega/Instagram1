@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.codepath.teleroid.MainActivity;
 import com.codepath.teleroid.databinding.ActivityRegisterBinding;
+import com.codepath.teleroid.utilities.AlertUtilities;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
@@ -75,30 +76,18 @@ public class RegisterActivity extends AppCompatActivity {
             public void done(ParseException e) {
                 if (e == null) {
                     progressDialog.dismiss();
-                    alertDisplayer("Register Successful", "Please login to " + username);
+                    AlertUtilities.alertDisplayer("Register Successful", "Please login to " + username, RegisterActivity.this);
                     startLoginActivity();
                     finish();
                 } else {
                     progressDialog.dismiss();
-                    alertDisplayer("Registration Fail", e.getMessage()+" Please Try Again");
+                    AlertUtilities.alertDisplayer("Registration Fail", e.getMessage()+" Please Try Again", RegisterActivity.this);
                 }
             }
         });
     }
 
-    private void alertDisplayer(String title, String message){
-        AlertDialog.Builder builder = new AlertDialog.Builder(RegisterActivity.this)
-                .setTitle(title)
-                .setMessage(message)
-                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                });
-        AlertDialog ok = builder.create();
-        ok.show();
-    }
+
 
     private void startLoginActivity() {
         Intent loginActivity = new Intent(this, LoginActivity.class);
