@@ -3,9 +3,11 @@ package com.codepath.teleroid.fragments;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.ImageDecoder;
 import android.graphics.Matrix;
 import android.media.ExifInterface;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -21,21 +23,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.codepath.teleroid.MainActivity;
-import com.codepath.teleroid.R;
-import com.codepath.teleroid.databinding.ActivityMainBinding;
 import com.codepath.teleroid.databinding.FragmentCreateBinding;
 import com.codepath.teleroid.models.Post;
-import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
-import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -46,6 +43,8 @@ public class CreateFragment extends Fragment {
 
     public static final String TAG = CreateFragment.class.getSimpleName(); //logging purposes
     public static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 32; //arbitrary
+    public static final int PICK_PHOTO_CODE = 30;
+
 
     private FragmentCreateBinding binding;
     private File photoFile;
@@ -65,11 +64,17 @@ public class CreateFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         binding.captureButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 launchCamera();
+            }
+        });
+
+        binding.galleryButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                pickPhoto();
             }
         });
 
@@ -110,6 +115,7 @@ public class CreateFragment extends Fragment {
         });
     }
 
+    //CAMERA
     /**
      * Implicit intent to launch camera application.
      * Outputs taken picture into fileProvider.
@@ -119,7 +125,7 @@ public class CreateFragment extends Fragment {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         // Create a File reference for future access
         String photoFileName = "photo.jpg";
-        photoFile = getPhotoFileUri(photoFileName);
+        photoFile = getPhotoFileFromUri(photoFileName);
 
         // wrap File object into a content provider
         // required for API >= 24
@@ -142,7 +148,7 @@ public class CreateFragment extends Fragment {
      * Helper method to get the identifier of the captured image.
      * @Return the File for a photo stored on disk given the fileName
      */
-    public File getPhotoFileUri(String fileName) {
+    public File getPhotoFileFromUri(String fileName) {
         // Get safe storage directory for photos
         // Use `getExternalFilesDir` on Context to access package-specific directories.
         // This way, we don't need to request external read/write runtime permissions.
@@ -194,6 +200,36 @@ public class CreateFragment extends Fragment {
         return rotatedBitmap;
     }
 
+    //GALLERY
+    // Trigger gallery selection for a photo
+    public void pickPhoto() {
+        // Create intent for picking a photo from the gallery
+        Intent intent = new Intent(Intent.ACTION_PICK,
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+
+        // If you call startActivityForResult() using an intent that no app can handle, your app will crash.
+        // So as long as the result is not null, it's safe to use the intent.
+        if (intent.resolveActivity(getContext().getPackageManager()) != null) {
+            // Bring up gallery to select a photo
+            startActivityForResult(intent, PICK_PHOTO_CODE);
+        }
+    }
+
+    public Bitmap loadFromUri(Uri photoUri) {
+        Bitmap bitmap = null;
+        try {
+            // check version of Android on device
+            if(Build.VERSION.SDK_INT > 27){
+                // on newer versions of Android, use the new decodeBitmap method
+                ImageDecoder.Source source = ImageDecoder.createSource(getContext().getContentResolver(), photoUri);
+                bitmap = ImageDecoder.decodeBitmap(source);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return bitmap;
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -207,6 +243,17 @@ public class CreateFragment extends Fragment {
             } else { // Result was a failure
                 Log.i(TAG, "Picture wasn't taken!");
             }
+        }
+
+        if ((data != null) && requestCode == PICK_PHOTO_CODE) {
+            Uri photoUri = data.getData();
+
+            // Load the image located at photoUri into selectedImage
+            Bitmap selectedImage = loadFromUri(photoUri);
+
+            // Load the selected image into a preview
+            binding.newPhoto.setImageBitmap(selectedImage);
+
         }
     }
 }
