@@ -16,11 +16,10 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.bumptech.glide.Glide;
 import com.codepath.teleroid.PostDetailsActivity;
 import com.codepath.teleroid.R;
-import com.codepath.teleroid.adapters.MinimalPostsAdapter;
+import com.codepath.teleroid.adapters.PreviewPostsAdapter;
 import com.codepath.teleroid.databinding.FragmentProfileBinding;
 import com.codepath.teleroid.models.Post;
 import com.parse.FindCallback;
-import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseQuery;
@@ -38,7 +37,7 @@ public class ProfileFragment extends Fragment {
     protected FragmentProfileBinding binding;
 
     protected List<Post> posts;
-    private MinimalPostsAdapter minimalPostsAdapter;
+    private PreviewPostsAdapter previewPostsAdapter;
     private int lastVisitedPost;
 
     private ParseUser profileOwnerUser;
@@ -62,12 +61,12 @@ public class ProfileFragment extends Fragment {
         posts = new ArrayList<>();
 
         //Bind data from User that owns the profile
-        bindProfileOwner(ParseUser.getCurrentUser());
+        bindProfileOwner(profileOwnerUser);
 
         //ADAPTER
 
         //Post preview listener --> Details
-        MinimalPostsAdapter.OnClickListener onClickListener = new MinimalPostsAdapter.OnClickListener() {
+        PreviewPostsAdapter.OnClickListener onClickListener = new PreviewPostsAdapter.OnClickListener() {
             @Override
             public void onItemClick(int position) {
 
@@ -84,8 +83,8 @@ public class ProfileFragment extends Fragment {
             }
         };
 
-        minimalPostsAdapter = new MinimalPostsAdapter(getContext(), posts, onClickListener);
-        binding.postsRecycler.setAdapter(minimalPostsAdapter);
+        previewPostsAdapter = new PreviewPostsAdapter(getContext(), posts, onClickListener);
+        binding.postsRecycler.setAdapter(previewPostsAdapter);
         binding.postsRecycler.setLayoutManager(new GridLayoutManager(getContext(), 3));
         queryPosts();
 
@@ -124,16 +123,20 @@ public class ProfileFragment extends Fragment {
             Glide.with(getContext())
                     .load(profilePicture.getUrl())
                     .circleCrop()
+                    .placeholder(R.drawable.default_profile_picture)
                     .into(binding.profilePicture);
         }
         catch (Exception e){
-            Log.e(TAG, "Error fetching profile picture");
-            binding.profilePicture.setBackgroundResource(R.drawable.default_profile_picture);
+            Log.e(TAG, "No profile picture found");
+            Glide.with(getContext())
+                    .load(R.drawable.default_profile_picture)
+                    .circleCrop()
+                    .into(binding.profilePicture);
         }
 
         //Display Name
         String displayName = user.getString("name");
-        if(displayName == null){
+        if(displayName == null || displayName.trim().equals("")){
             displayName = user.getUsername();
         }
         binding.displayName.setText(displayName);
@@ -162,7 +165,7 @@ public class ProfileFragment extends Fragment {
                 Log.i(TAG, "Posts retrieved successfully!");
                 posts.clear();
                 posts.addAll(newPosts);
-                minimalPostsAdapter.notifyDataSetChanged();
+                previewPostsAdapter.notifyDataSetChanged();
             }
         });
     }

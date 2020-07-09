@@ -27,8 +27,9 @@ public class MainActivity extends AppCompatActivity {
 
     public static final String TAG = MainActivity.class.getSimpleName(); //logging purposes
 
-    private ActivityMainBinding binding;
-    private BottomNavigationView bottomMenu;
+    //Protected since SomeonesProfileActivity (a child) requires access
+    protected ActivityMainBinding binding;
+    protected BottomNavigationView bottomMenu;
 
     final FragmentManager fragmentManager = getSupportFragmentManager();
 

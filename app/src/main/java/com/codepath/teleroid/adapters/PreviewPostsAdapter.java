@@ -9,14 +9,13 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.codepath.teleroid.databinding.ItemMinimalPostBinding;
-import com.codepath.teleroid.databinding.ItemPostBinding;
+import com.codepath.teleroid.databinding.ItemPreviewPostBinding;
 import com.codepath.teleroid.models.Post;
 import com.parse.ParseFile;
 
 import java.util.List;
 
-public class MinimalPostsAdapter extends RecyclerView.Adapter<MinimalPostsAdapter.ViewHolder> {
+public class PreviewPostsAdapter extends RecyclerView.Adapter<PreviewPostsAdapter.ViewHolder> {
 
     protected Context context;
     protected List<Post> posts;
@@ -27,7 +26,7 @@ public class MinimalPostsAdapter extends RecyclerView.Adapter<MinimalPostsAdapte
         void onItemClick(int position);
     }
 
-    public MinimalPostsAdapter(Context context, List<Post> posts, OnClickListener clickListener){
+    public PreviewPostsAdapter(Context context, List<Post> posts, OnClickListener clickListener){
         this.context = context;
         this.posts = posts;
         this.clickListener = clickListener;
@@ -42,7 +41,7 @@ public class MinimalPostsAdapter extends RecyclerView.Adapter<MinimalPostsAdapte
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        ItemMinimalPostBinding binding = ItemMinimalPostBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+        ItemPreviewPostBinding binding = ItemPreviewPostBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
         return new ViewHolder(binding);
     }
 
@@ -59,9 +58,9 @@ public class MinimalPostsAdapter extends RecyclerView.Adapter<MinimalPostsAdapte
 
     class ViewHolder extends RecyclerView.ViewHolder{
 
-        ItemMinimalPostBinding binding;
+        ItemPreviewPostBinding binding;
 
-        public ViewHolder(@NonNull ItemMinimalPostBinding binding){
+        public ViewHolder(@NonNull ItemPreviewPostBinding binding){
             super(binding.getRoot());
             this.binding = binding;
         }
