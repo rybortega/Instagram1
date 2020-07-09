@@ -21,6 +21,7 @@ import com.codepath.teleroid.databinding.ActivityMainBinding;
 import com.codepath.teleroid.databinding.ItemPostBinding;
 import com.codepath.teleroid.fragments.ProfileFragment;
 import com.codepath.teleroid.models.Post;
+import com.codepath.teleroid.utilities.DateUtility;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
 
@@ -80,6 +81,10 @@ public class DetailedPostsAdapter extends RecyclerView.Adapter<DetailedPostsAdap
         public void bind(final Post post){
             binding.postCaption.setText(post.getCaption());
             binding.profileHandle.setText(post.getUser().getUsername());
+
+            //Timestamp
+            String relativeDate = DateUtility.getRelativeTimeAgo(post);
+            binding.timestamp.setText(relativeDate);
 
             //User's profile picture
             ParseFile userProfilePicture = post.getUser().getParseFile("profilePicture");

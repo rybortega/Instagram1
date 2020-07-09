@@ -17,11 +17,14 @@ import com.codepath.teleroid.fragments.CreateFragment;
 import com.codepath.teleroid.fragments.HomeFragment;
 import com.codepath.teleroid.fragments.ProfileFragment;
 import com.codepath.teleroid.models.Post;
+import com.codepath.teleroid.utilities.DateUtility;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
 
 import org.parceler.Parcels;
+
+import java.util.Date;
 
 public class PostDetailsActivity extends AppCompatActivity {
 
@@ -75,6 +78,10 @@ public class PostDetailsActivity extends AppCompatActivity {
         //Setting Views to corresponding post
         binding.postCaption.setText(selectedPost.getCaption());
         binding.profileHandle.setText(selectedPost.getUser().getUsername());
+
+        String relativeDate = DateUtility.getRelativeTimeAgo(selectedPost);
+        binding.timestamp.setText(relativeDate);
+
 
         ParseFile image = selectedPost.getImage();
         if(image != null){
