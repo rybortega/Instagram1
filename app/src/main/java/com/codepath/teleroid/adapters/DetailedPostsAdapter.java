@@ -2,6 +2,7 @@ package com.codepath.teleroid.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,8 +21,10 @@ import com.codepath.teleroid.SomeonesProfileActivity;
 import com.codepath.teleroid.databinding.ActivityMainBinding;
 import com.codepath.teleroid.databinding.ItemPostBinding;
 import com.codepath.teleroid.fragments.ProfileFragment;
+import com.codepath.teleroid.models.Like;
 import com.codepath.teleroid.models.Post;
 import com.codepath.teleroid.utilities.DateUtility;
+import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
 
@@ -96,6 +99,49 @@ public class DetailedPostsAdapter extends RecyclerView.Adapter<DetailedPostsAdap
             //Timestamp
             String relativeDate = DateUtility.getRelativeTimeAgo(post);
             binding.timestamp.setText(relativeDate);
+
+            //Like status
+
+            //Like numbers
+            List<Like> likes = post.getLikes();
+            int numOfLikes = likes.size();
+            Resources res = context.getResources();
+
+            if(numOfLikes > 0) {
+                Like singleLike  = post.getLikes().get(0);
+                ParseUser authorOfLike = singleLike.getAuthor();
+                String nameAuthorOfLike = "";
+
+                if(numOfLikes == 1){ // Only 1 like --> user likes this
+                    try {
+                        nameAuthorOfLike = authorOfLike.fetchIfNeeded().getString("username");
+                        binding.likesText.setVisibility(View.VISIBLE);
+
+                        String likeText = String.format(res.getString(R.string.likes), nameAuthorOfLike);
+                        binding.likesText.setText(likeText);
+                    }
+                    catch (Exception e) {
+                        Log.e(TAG, "Couldn't retrieve username: " + e);
+                        binding.likesText.setVisibility(View.GONE);
+                    }
+                }
+                else { //Multiple likes --> show 1 user and 'and # others like this'
+                    try {
+                        nameAuthorOfLike = authorOfLike.fetchIfNeeded().getString("username");
+                        binding.likesText.setVisibility(View.VISIBLE);
+
+                        String likeText = String.format(res.getString(R.string.multiple_likes), nameAuthorOfLike, numOfLikes-1);
+                        binding.likesText.setText(likeText);
+                    }
+                    catch (Exception e) {
+                        Log.e(TAG, "Couldn't retrieve username: " + e);
+                        binding.likesText.setVisibility(View.GONE);
+                    }
+                }
+            }
+            else{ //No likes yet
+                binding.likesText.setVisibility(View.GONE);
+            }
 
             //User's profile picture
             ParseFile userProfilePicture = post.getUser().getParseFile("profilePicture");

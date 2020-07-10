@@ -7,6 +7,9 @@ import com.parse.ParseUser;
 
 import org.parceler.Parcel;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @ParseClassName("Post") //Matches the name of the Parse entity
 @Parcel(analyze={Post.class})
 public class Post extends ParseObject {
@@ -17,8 +20,10 @@ public class Post extends ParseObject {
     public static final String KEY_USER = "user";
     public static final String KEY_TIME = "createdAt";
 
+    private List<Like> likes = new ArrayList<>();
+
     public  Post(){
-        //empty constructor needed by Parceler
+        //empty constructor needed by Parceler & Parce
     }
 
     public String getCaption(){
@@ -33,6 +38,10 @@ public class Post extends ParseObject {
         return getParseUser(KEY_USER);
     }
 
+    public List<Like> getLikes() {
+        return likes;
+    }
+
     public void setCaption(String caption){
         put(KEY_CAPTION, caption);
     }
@@ -45,5 +54,7 @@ public class Post extends ParseObject {
         put(KEY_USER, user);
     }
 
-
+    public void setLikes(List<Like> likes) {
+        this.likes.addAll(likes);
+    }
 }

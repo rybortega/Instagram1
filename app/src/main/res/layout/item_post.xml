@@ -2,15 +2,15 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/itemContainer"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingVertical="8dp"
-    android:id="@+id/itemContainer">
+    android:paddingVertical="8dp">
 
     <RelativeLayout
+        android:id="@+id/userContainer"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:id="@+id/userContainer"
         android:paddingHorizontal="16dp">
 
         <ImageView
@@ -34,11 +34,11 @@
             android:id="@+id/moreOption"
             android:layout_width="20dp"
             android:layout_height="20dp"
-            android:layout_centerVertical="true"
             android:layout_alignParentEnd="true"
-            android:src="@drawable/ufi_more"
+            android:layout_centerVertical="true"
+            android:background="#00FFFFFF"
             android:scaleType="fitCenter"
-            android:background="#00FFFFFF"/>
+            android:src="@drawable/ufi_more"/>
 
     </RelativeLayout>
 
@@ -46,46 +46,47 @@
         android:id="@+id/postPhoto"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:src="@tools:sample/avatars"
-        android:layout_below="@id/userContainer"/>
+        android:layout_below="@id/userContainer"
+        tools:src="@tools:sample/avatars"/>
 
     <LinearLayout
+        android:id="@+id/actionsContainer"
         android:layout_width="wrap_content"
         android:layout_height="40dp"
-        android:id="@+id/actionsContainer"
-        android:orientation="horizontal"
+        android:layout_below="@id/postPhoto"
         android:layout_marginStart="16dp"
         android:gravity="center"
-        android:layout_below="@id/postPhoto">
+        android:orientation="horizontal"
+        android:paddingTop="8dp">
 
         <ImageButton
             android:id="@+id/actionLike"
             android:layout_width="30dp"
             android:layout_height="match_parent"
-            android:src="@drawable/ufi_heart_icon"
-            android:scaleType="fitCenter"
-            android:layout_marginVertical="4dp"
             android:layout_marginHorizontal="4dp"
+            android:layout_marginVertical="4dp"
+            android:layout_weight="1"
             android:background="#00000000"
-            android:layout_weight="1"/>
+            android:scaleType="fitCenter"
+            android:src="@drawable/ufi_heart_icon"/>
         <ImageButton
             android:id="@+id/actionComment"
             android:layout_width="30dp"
             android:layout_height="wrap_content"
-            android:src="@drawable/ufi_comment"
-            android:scaleType="fitCenter"
-            android:layout_marginVertical="4dp"
             android:layout_marginHorizontal="4dp"
+            android:layout_marginVertical="4dp"
             android:layout_weight="1"
-            android:background="#00000000" />
+            android:background="#00000000"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ufi_comment" />
         <ImageButton
             android:id="@+id/actionDirect"
             android:layout_width="40dp"
             android:layout_height="wrap_content"
-            android:src="@drawable/ufi_new_direct"
-            android:scaleType="fitCenter"
             android:layout_weight="1"
-            android:background="#00000000" />
+            android:background="#00000000"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ufi_new_direct" />
     </LinearLayout>
 
     <ImageButton
@@ -99,23 +100,33 @@
         android:layout_marginEnd="16dp"
         android:layout_weight="1"
         android:background="#00000000"
+        android:paddingTop="8dp"
         android:scaleType="fitCenter"
-        android:src="@drawable/ufi_save"
+        android:src="@drawable/ufi_save_icon"
         android:tint="@android:color/black"/>
+
+    <TextView
+        android:id="@+id/likesText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/actionsContainer"
+        android:layout_alignStart="@id/actionsContainer"
+        android:paddingVertical="4dp"
+        android:text="@string/likes"/>
 
     <TextView
         android:id="@+id/postCaption"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:text="@tools:sample/lorem[100]"
+        android:layout_below="@id/likesText"
+        android:layout_alignStart="@id/actionsContainer"
+        android:layout_alignEnd="@id/actionBookmark"
+        android:ellipsize="end"
         android:inputType="textMultiLine"
         android:maxLines="3"
-        android:ellipsize="end"
-        android:layout_alignStart="@id/actionsContainer"
-        android:layout_below="@id/actionsContainer"
-        android:layout_alignEnd="@id/actionBookmark"
+        android:paddingVertical="4dp"
         android:textSize="14dp"
-        android:paddingVertical="8dp"/>
+        tools:text="@tools:sample/lorem[100]"/>
 
     <TextView
         android:id="@+id/timestamp"

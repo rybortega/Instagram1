@@ -18,4 +18,6 @@
     <string name="already_account">Already have an account?</string>
     <string name="login">Log in</string>
     <string name="gallery">Select Gallery</string>
+    <string name="likes">%1$s likes this</string>
+    <string name="multiple_likes">%1$s and %2$d others like this</string>
 </resources>

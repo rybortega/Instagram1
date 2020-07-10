@@ -17,10 +17,12 @@ import android.view.ViewGroup;
 import com.codepath.teleroid.R;
 import com.codepath.teleroid.adapters.DetailedPostsAdapter;
 import com.codepath.teleroid.databinding.FragmentHomeBinding;
+import com.codepath.teleroid.models.Like;
 import com.codepath.teleroid.models.Post;
 import com.codepath.teleroid.utilities.EndlessRecyclerViewScrollListener;
 import com.parse.FindCallback;
 import com.parse.ParseException;
+import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
 import java.util.ArrayList;
@@ -118,6 +120,12 @@ public class HomeFragment extends Fragment {
                     Log.e(TAG, "Couldn't query posts: " + e);
                     return;
                 }
+
+                //TODO TEST
+                for(Post post : newPosts) {
+                    fetchLikes(post);
+                }
+
                 Log.i(TAG, "Posts retrieved successfully!");
                 detailedPostsAdapter.clear();
                 detailedPostsAdapter.addAll(newPosts);
@@ -130,7 +138,7 @@ public class HomeFragment extends Fragment {
 
         ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
         query.include(Post.KEY_USER);
-        query.whereLessThan(Post.KEY_TIME,posts.get(posts.size()-1).getCreatedAt());
+        query.whereLessThan(Post.KEY_TIME, posts.get(posts.size()-1).getCreatedAt());
         query.setLimit(NUMBER_OF_POSTS_TO_LOAD);
         query.addDescendingOrder(Post.KEY_TIME);
         query.findInBackground(new FindCallback<Post>() {
@@ -140,11 +148,34 @@ public class HomeFragment extends Fragment {
                     Log.e(TAG, "Couldn't query posts: " + e);
                     return;
                 }
+
+                //TODO TEST
+                for(Post post : morePosts) {
+                    fetchLikes(post);
+                }
+
                 Log.i(TAG, "Posts retrieved successfully!");
                 detailedPostsAdapter.addAll(morePosts);
-                //detailedPostsAdapter.notifyDataSetChanged();
             }
         });
+    }
 
+    public void fetchLikes(final Post post){
+        Log.i(TAG, "Trying to retrieve likes");
+        Log.i(TAG, "Retrieving likes for: " + post);
+        ParseQuery<Like> query = ParseQuery.getQuery(Like.class);
+        query.addDescendingOrder(Like.KEY_TIME);
+        query.whereEqualTo(Like.KEY_TARGET, post);
+        query.findInBackground(new FindCallback<Like>() {
+            @Override
+            public void done(List<Like> likes, ParseException e) {
+                if (e != null) {
+                    Log.e(TAG, "Couldn't query posts: " + e);
+                    return;
+                }
+                post.setLikes(likes);
+                Log.i(TAG, "Likes for: " + post.getCaption() + " are " + post.getLikes().toString());
+            }
+        });
     }
 }
