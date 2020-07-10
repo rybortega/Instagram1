@@ -84,6 +84,9 @@ public class HomeFragment extends Fragment {
                 //Clears and repopulates
                 queryPosts();
 
+                //Reset endless scroller state
+                scrollListener.resetState();
+
                 //Turn off the reload signal
                 binding.swipeRefreshContainer.setRefreshing(false);
             }

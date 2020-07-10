@@ -55,6 +55,11 @@ public class DetailedPostsAdapter extends RecyclerView.Adapter<DetailedPostsAdap
     public void addAll(List<Post> newPosts) {
         posts.addAll(newPosts);
         notifyDataSetChanged();
+        int i = 1;
+        for(Post post: posts){
+            Log.d(TAG, "post #" + i + ": " + post.toString());
+            i++;
+        }
     }
 
     @NonNull
