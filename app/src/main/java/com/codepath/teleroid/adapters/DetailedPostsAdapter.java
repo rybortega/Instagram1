@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -24,9 +25,12 @@ import com.codepath.teleroid.fragments.ProfileFragment;
 import com.codepath.teleroid.models.Like;
 import com.codepath.teleroid.models.Post;
 import com.codepath.teleroid.utilities.DateUtility;
+import com.parse.DeleteCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.ParseObject;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
 import org.parceler.Parcels;
 
@@ -100,10 +104,67 @@ public class DetailedPostsAdapter extends RecyclerView.Adapter<DetailedPostsAdap
             String relativeDate = DateUtility.getRelativeTimeAgo(post);
             binding.timestamp.setText(relativeDate);
 
+            //LIKES
+            List<Like> likes = post.getLikes();
+            Like currentUserLike = null;
+
             //Like status
+            binding.actionLike.setSelected(false);
+            for(Like like: likes){
+                if(like.getAuthor().getObjectId().equals(ParseUser.getCurrentUser().getObjectId())){
+                    currentUserLike = like;
+                    binding.actionLike.setSelected(true);
+                }
+            }
+
+            //Like button listener
+
+            final Like finalCurrentUserLike = currentUserLike;
+            binding.actionLike.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if(binding.actionLike.isSelected()){
+                        try{
+                            finalCurrentUserLike.deleteInBackground(new DeleteCallback() {
+                                @Override
+                                public void done(ParseException e) {
+                                    if (e != null) {
+                                        Log.e(TAG, "Error unliking post: " + e);
+                                        Toast.makeText(context, "Error liking activity", Toast.LENGTH_SHORT);
+                                        return;
+                                    }
+
+                                    Log.e(TAG, "User unliked a post!");
+                                    binding.actionLike.setSelected(false);
+                                }
+                            });
+                        }
+                        catch(NullPointerException e){
+                            Log.e(TAG, "Error in unliking: " + e);
+                        }
+                    }
+                    else{
+                        Like newLike = new Like();
+                        newLike.setAuthor(ParseUser.getCurrentUser());
+                        newLike.setTarget(post);
+                        newLike.saveInBackground(new SaveCallback() {
+                            @Override
+                            public void done(ParseException e) {
+                                if (e != null) {
+                                    Log.e(TAG, "Error in liking post: " + e);
+                                    Toast.makeText(context, "Error liking activity", Toast.LENGTH_SHORT);
+                                    return;
+                                }
+
+                                Log.e(TAG, "User liked a post!");
+                                binding.actionLike.setSelected(true);
+                            }
+                        });
+                    }
+                }
+            });
 
             //Like numbers
-            List<Like> likes = post.getLikes();
             int numOfLikes = likes.size();
             Resources res = context.getResources();
 
