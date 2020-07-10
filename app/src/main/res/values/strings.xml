@@ -18,6 +18,9 @@
     <string name="already_account">Already have an account?</string>
     <string name="login">Log in</string>
     <string name="gallery">Select Gallery</string>
-    <string name="likes">%1$s likes this</string>
-    <string name="multiple_likes">%1$s and %2$d others like this</string>
+    <string name="single_like">%1$s likes this</string>
+    <plurals name="multiple_likes">
+        <item quantity="one">%1$s and %2$d other like this</item>
+        <item quantity="other">%1$s and %2$d others like this</item>
+    </plurals>
 </resources>

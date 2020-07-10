@@ -117,7 +117,7 @@ public class DetailedPostsAdapter extends RecyclerView.Adapter<DetailedPostsAdap
                         nameAuthorOfLike = authorOfLike.fetchIfNeeded().getString("username");
                         binding.likesText.setVisibility(View.VISIBLE);
 
-                        String likeText = String.format(res.getString(R.string.likes), nameAuthorOfLike);
+                        String likeText = res.getString(R.string.single_like, nameAuthorOfLike);
                         binding.likesText.setText(likeText);
                     }
                     catch (Exception e) {
@@ -130,7 +130,7 @@ public class DetailedPostsAdapter extends RecyclerView.Adapter<DetailedPostsAdap
                         nameAuthorOfLike = authorOfLike.fetchIfNeeded().getString("username");
                         binding.likesText.setVisibility(View.VISIBLE);
 
-                        String likeText = String.format(res.getString(R.string.multiple_likes), nameAuthorOfLike, numOfLikes-1);
+                        String likeText = res.getQuantityString(R.plurals.multiple_likes, numOfLikes-1, nameAuthorOfLike, numOfLikes-1);
                         binding.likesText.setText(likeText);
                     }
                     catch (Exception e) {

@@ -112,7 +112,7 @@
         android:layout_below="@id/actionsContainer"
         android:layout_alignStart="@id/actionsContainer"
         android:paddingVertical="4dp"
-        android:text="@string/likes"/>
+        tools:text="@string/single_like"/>
 
     <TextView
         android:id="@+id/postCaption"
