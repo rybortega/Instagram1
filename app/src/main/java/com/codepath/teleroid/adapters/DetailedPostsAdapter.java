@@ -51,6 +51,12 @@ public class DetailedPostsAdapter extends RecyclerView.Adapter<DetailedPostsAdap
         notifyDataSetChanged();
     }
 
+    // Add a list of items -- change to type used
+    public void addAll(List<Post> newPosts) {
+        posts.addAll(newPosts);
+        notifyDataSetChanged();
+    }
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {

@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.util.Log;
@@ -17,6 +18,7 @@ import com.codepath.teleroid.R;
 import com.codepath.teleroid.adapters.DetailedPostsAdapter;
 import com.codepath.teleroid.databinding.FragmentHomeBinding;
 import com.codepath.teleroid.models.Post;
+import com.codepath.teleroid.utilities.EndlessRecyclerViewScrollListener;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -31,10 +33,15 @@ public class HomeFragment extends Fragment {
 
     public static final String TAG = HomeFragment.class.getSimpleName(); //logging purposes
 
+    public static final int NUMBER_OF_POSTS_TO_LOAD = 4;
+
     private FragmentHomeBinding binding;
 
     private List<Post> posts;
     private DetailedPostsAdapter detailedPostsAdapter;
+    private EndlessRecyclerViewScrollListener scrollListener;
+    private LinearLayoutManager linearLayoutManager;
+
 
     public HomeFragment() {
         // Required empty public constructor
@@ -54,9 +61,10 @@ public class HomeFragment extends Fragment {
 
         posts = new ArrayList<>();
         detailedPostsAdapter = new DetailedPostsAdapter(getContext(), posts);
-
+        linearLayoutManager = new LinearLayoutManager(getContext());
         binding.postsRecycler.setAdapter(detailedPostsAdapter);
-        binding.postsRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
+        binding.postsRecycler.setLayoutManager(linearLayoutManager);
+
 
         queryPosts();
 
@@ -80,12 +88,25 @@ public class HomeFragment extends Fragment {
                 binding.swipeRefreshContainer.setRefreshing(false);
             }
         });
+
+        scrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                // Triggered only when new data needs to be appended to the list
+                // Add whatever code is needed to append new items to the bottom of the list
+                Log.i(TAG, "Gotta retrieve more! To page: " + page);
+                queryMorePosts(page);
+            }
+        };
+        // Adds the scroll listener to RecyclerView
+        binding.postsRecycler.addOnScrollListener(scrollListener);
     }
 
     protected void queryPosts() {
+        Log.i(TAG, "Retrieving posts...");
         ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
         query.include(Post.KEY_USER);
-        query.setLimit(20); //Limits number of results.
+        query.setLimit(NUMBER_OF_POSTS_TO_LOAD); //Limits number of results.
         query.addDescendingOrder(Post.KEY_TIME);
         query.findInBackground(new FindCallback<Post>() {
             @Override
@@ -96,9 +117,31 @@ public class HomeFragment extends Fragment {
                 }
                 Log.i(TAG, "Posts retrieved successfully!");
                 detailedPostsAdapter.clear();
-                posts.addAll(newPosts);
-                detailedPostsAdapter.notifyDataSetChanged();
+                detailedPostsAdapter.addAll(newPosts);
             }
         });
+    }
+
+    public void queryMorePosts(int offset) {
+        Log.i(TAG, "Retrieving MORE posts...");
+
+        ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
+        query.include(Post.KEY_USER);
+        query.whereLessThan(Post.KEY_TIME,posts.get(posts.size()-1).getCreatedAt());
+        query.setLimit(NUMBER_OF_POSTS_TO_LOAD);
+        query.addDescendingOrder(Post.KEY_TIME);
+        query.findInBackground(new FindCallback<Post>() {
+            @Override
+            public void done(List<Post> morePosts, ParseException e) {
+                if (e != null) {
+                    Log.e(TAG, "Couldn't query posts: " + e);
+                    return;
+                }
+                Log.i(TAG, "Posts retrieved successfully!");
+                detailedPostsAdapter.addAll(morePosts);
+                //detailedPostsAdapter.notifyDataSetChanged();
+            }
+        });
+
     }
 }
