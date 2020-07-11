@@ -41,7 +41,7 @@ The following **additional** features are implemented:
 
 Here's a walkthrough of implemented user stories:
 <p align="center">
-  <img src="demo/teleroid_demo.gif" width="500">
+  <img src="demo/teleroid_demo.gif" width="300">
 </p>
 
 ## Notes
