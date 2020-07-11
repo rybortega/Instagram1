@@ -129,13 +129,35 @@
         tools:text="@tools:sample/lorem[100]"/>
 
     <TextView
-        android:id="@+id/timestamp"
+        android:id="@+id/seeMoreButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/postCaption"
         android:layout_alignStart="@+id/postCaption"
+        tools:text="@string/ViewAllComments"
+        android:textColor="@android:color/holo_blue_light"
+        android:clickable="true"/>
+
+    <TextView
+        android:id="@+id/commentPreview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:text="@tools:sample/lorem[10]"
+        android:layout_below="@id/seeMoreButton"
+        android:layout_alignStart="@id/actionsContainer"
+        android:layout_alignEnd="@id/actionBookmark"
+        android:paddingVertical="4dp"
+        android:maxLines="2"
+        android:ellipsize="end"/>
+
+    <TextView
+        android:id="@+id/timestamp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/commentPreview"
+        android:layout_alignStart="@+id/postCaption"
         android:textSize="10dp"
-        tools:text="February 30, 2020" />
+        tools:text="February 30, 2020"/>
 
 
 </RelativeLayout>

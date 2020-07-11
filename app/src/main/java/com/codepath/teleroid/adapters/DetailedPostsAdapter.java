@@ -10,25 +10,20 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.codepath.teleroid.MainActivity;
 import com.codepath.teleroid.R;
-import com.codepath.teleroid.SomeonesProfileActivity;
-import com.codepath.teleroid.databinding.ActivityMainBinding;
+import com.codepath.teleroid.activities.CommentActivity;
+import com.codepath.teleroid.activities.SomeonesProfileActivity;
 import com.codepath.teleroid.databinding.ItemPostBinding;
-import com.codepath.teleroid.fragments.ProfileFragment;
+import com.codepath.teleroid.models.Comment;
 import com.codepath.teleroid.models.Like;
 import com.codepath.teleroid.models.Post;
 import com.codepath.teleroid.utilities.DateUtility;
 import com.parse.DeleteCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
-import com.parse.ParseObject;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
@@ -38,9 +33,7 @@ import java.util.List;
 
 public class DetailedPostsAdapter extends RecyclerView.Adapter<DetailedPostsAdapter.ViewHolder> {
 
-    public static final String TAG = DetailedPostsAdapter.class.getSimpleName(); //logging purposes
-
-    private final FragmentManager fragmentManager;
+    private static final String TAG = DetailedPostsAdapter.class.getSimpleName(); //logging purposes
 
     private Context context;
     private List<Post> posts;
@@ -48,8 +41,6 @@ public class DetailedPostsAdapter extends RecyclerView.Adapter<DetailedPostsAdap
     public DetailedPostsAdapter(Context context, List<Post> posts){
         this.context = context;
         this.posts = posts;
-        this.fragmentManager = ((AppCompatActivity) context).getSupportFragmentManager();
-
     }
 
     // Clean all elements of the recycler
@@ -97,6 +88,9 @@ public class DetailedPostsAdapter extends RecyclerView.Adapter<DetailedPostsAdap
         }
 
         public void bind(final Post post){
+
+            Resources resources = context.getResources();
+
             binding.postCaption.setText(post.getCaption());
             binding.profileHandle.setText(post.getUser().getUsername());
 
@@ -166,8 +160,6 @@ public class DetailedPostsAdapter extends RecyclerView.Adapter<DetailedPostsAdap
 
             //Like numbers
             int numOfLikes = likes.size();
-            Resources res = context.getResources();
-
             if(numOfLikes > 0) {
                 Like singleLike  = post.getLikes().get(0);
                 ParseUser authorOfLike = singleLike.getAuthor();
@@ -178,7 +170,7 @@ public class DetailedPostsAdapter extends RecyclerView.Adapter<DetailedPostsAdap
                         nameAuthorOfLike = authorOfLike.fetchIfNeeded().getString("username");
                         binding.likesText.setVisibility(View.VISIBLE);
 
-                        String likeText = res.getString(R.string.single_like, nameAuthorOfLike);
+                        String likeText = resources.getString(R.string.single_like, nameAuthorOfLike);
                         binding.likesText.setText(likeText);
                     }
                     catch (Exception e) {
@@ -191,7 +183,7 @@ public class DetailedPostsAdapter extends RecyclerView.Adapter<DetailedPostsAdap
                         nameAuthorOfLike = authorOfLike.fetchIfNeeded().getString("username");
                         binding.likesText.setVisibility(View.VISIBLE);
 
-                        String likeText = res.getQuantityString(R.plurals.multiple_likes, numOfLikes-1, nameAuthorOfLike, numOfLikes-1);
+                        String likeText = resources.getQuantityString(R.plurals.multiple_likes, numOfLikes-1, nameAuthorOfLike, numOfLikes-1);
                         binding.likesText.setText(likeText);
                     }
                     catch (Exception e) {
@@ -203,6 +195,58 @@ public class DetailedPostsAdapter extends RecyclerView.Adapter<DetailedPostsAdap
             else{ //No likes yet
                 binding.likesText.setVisibility(View.GONE);
             }
+
+            //COMMENTS
+            List<Comment> comments = post.getComments();
+
+            //Comment button listener
+            binding.actionLike.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    Intent commentOnPostIntent = new Intent(context,
+                            CommentActivity.class);
+
+                    commentOnPostIntent.putExtra("post_object", Parcels.wrap(post));
+                    context.startActivity(commentOnPostIntent);
+                }
+            });
+
+            //Comment numbers
+            int numOfComments = comments.size();
+            if(numOfComments >= 1) {
+
+                binding.commentPreview.setVisibility(View.VISIBLE);
+                binding.seeMoreButton.setVisibility(View.VISIBLE);
+
+                Comment singleComment  = post.getComments().get(0);
+                String bodyOfComment = singleComment.getBody();
+
+                ParseUser authorOfComment = singleComment.getAuthor();
+                String nameAuthorOfComment;
+                try {
+                    nameAuthorOfComment = authorOfComment.fetchIfNeeded().getString("username");
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                    nameAuthorOfComment = "";
+                    binding.commentPreview.setVisibility(View.GONE);
+                }
+
+                //TODO: FIX THESE
+                String commentText = resources.getString(R.string.comment_preview, nameAuthorOfComment, bodyOfComment);
+                binding.commentPreview.setText(commentText);
+
+                String viewAllCommentsText = resources.getString(R.string.view_all_comments, numOfComments);
+                binding.seeMoreButton.setText(viewAllCommentsText);
+
+                if(numOfComments == 1){binding.seeMoreButton.setVisibility(View.GONE);}
+
+            }
+            else{
+                binding.commentPreview.setVisibility(View.GONE);
+                binding.seeMoreButton.setVisibility(View.GONE);
+            }
+
 
             //User's profile picture
             ParseFile userProfilePicture = post.getUser().getParseFile("profilePicture");

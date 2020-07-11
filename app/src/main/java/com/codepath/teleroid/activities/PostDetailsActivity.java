@@ -1,8 +1,7 @@
-package com.codepath.teleroid;
+package com.codepath.teleroid.activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
 import android.os.Bundle;
@@ -11,7 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.bumptech.glide.Glide;
-import com.codepath.teleroid.databinding.ActivityMainBinding;
+import com.codepath.teleroid.R;
 import com.codepath.teleroid.databinding.ActivityPostDetailsBinding;
 import com.codepath.teleroid.fragments.CreateFragment;
 import com.codepath.teleroid.fragments.HomeFragment;
@@ -23,8 +22,6 @@ import com.parse.ParseFile;
 import com.parse.ParseUser;
 
 import org.parceler.Parcels;
-
-import java.util.Date;
 
 public class PostDetailsActivity extends AppCompatActivity {
 

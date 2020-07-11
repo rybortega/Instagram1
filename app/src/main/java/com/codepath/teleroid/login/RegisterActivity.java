@@ -1,16 +1,13 @@
 package com.codepath.teleroid.login;
 
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.codepath.teleroid.MainActivity;
 import com.codepath.teleroid.databinding.ActivityRegisterBinding;
 import com.codepath.teleroid.utilities.AlertUtilities;
 import com.parse.ParseException;

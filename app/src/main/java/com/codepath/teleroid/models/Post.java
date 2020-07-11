@@ -21,6 +21,7 @@ public class Post extends ParseObject {
     public static final String KEY_TIME = "createdAt";
 
     private List<Like> likes = new ArrayList<>();
+    private List<Comment> comments = new ArrayList<>();
 
     public  Post(){
         //empty constructor needed by Parceler & Parce
@@ -42,6 +43,10 @@ public class Post extends ParseObject {
         return likes;
     }
 
+    public List<Comment> getComments() {
+        return comments;
+    }
+
     public void setCaption(String caption){
         put(KEY_CAPTION, caption);
     }
@@ -57,4 +62,9 @@ public class Post extends ParseObject {
     public void setLikes(List<Like> likes) {
         this.likes.addAll(likes);
     }
+
+    public void setComments(List<Comment> comments) {
+        this.comments.addAll(comments);
+    }
+
 }

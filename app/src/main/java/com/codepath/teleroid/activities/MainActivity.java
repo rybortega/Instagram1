@@ -1,4 +1,4 @@
-package com.codepath.teleroid;
+package com.codepath.teleroid.activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.codepath.teleroid.R;
 import com.codepath.teleroid.databinding.ActivityMainBinding;
 import com.codepath.teleroid.fragments.CreateFragment;
 import com.codepath.teleroid.fragments.HomeFragment;

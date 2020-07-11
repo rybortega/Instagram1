@@ -1,6 +1,5 @@
 package com.codepath.teleroid.login;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,12 +8,11 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.codepath.teleroid.MainActivity;
+import com.codepath.teleroid.activities.MainActivity;
 import com.codepath.teleroid.databinding.ActivityLoginBinding;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
-import com.parse.SignUpCallback;
 
 public class LoginActivity extends AppCompatActivity {
 

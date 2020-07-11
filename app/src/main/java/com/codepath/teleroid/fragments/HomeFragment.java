@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import com.codepath.teleroid.R;
 import com.codepath.teleroid.adapters.DetailedPostsAdapter;
 import com.codepath.teleroid.databinding.FragmentHomeBinding;
+import com.codepath.teleroid.models.Comment;
 import com.codepath.teleroid.models.Like;
 import com.codepath.teleroid.models.Post;
 import com.codepath.teleroid.utilities.EndlessRecyclerViewScrollListener;
@@ -121,9 +122,10 @@ public class HomeFragment extends Fragment {
                     return;
                 }
 
-                //TODO TEST
+                //Fetch likes and comments
                 for(Post post : newPosts) {
                     fetchLikes(post);
+                    fetchComments(post);
                 }
 
                 Log.i(TAG, "Posts retrieved successfully!");
@@ -149,9 +151,11 @@ public class HomeFragment extends Fragment {
                     return;
                 }
 
-                //TODO TEST
+                //Fetch likes and comments
                 for(Post post : morePosts) {
                     fetchLikes(post);
+                    fetchComments(post);
+
                 }
 
                 Log.i(TAG, "Posts retrieved successfully!");
@@ -175,6 +179,25 @@ public class HomeFragment extends Fragment {
                 }
                 post.setLikes(likes);
                 Log.i(TAG, "Likes for: " + post.getCaption() + " are " + post.getLikes().toString());
+            }
+        });
+    }
+
+    private void fetchComments(final Post post) {
+        Log.i(TAG, "Trying to retrieve comments");
+        Log.i(TAG, "Retrieving comments for: " + post);
+        ParseQuery<Comment> query = ParseQuery.getQuery(Comment.class);
+        query.addDescendingOrder(Comment.KEY_TIME);
+        query.whereEqualTo(Comment.KEY_TARGET, post);
+        query.findInBackground(new FindCallback<Comment>() {
+            @Override
+            public void done(List<Comment> comments, ParseException e) {
+                if (e != null) {
+                    Log.e(TAG, "Couldn't query posts: " + e);
+                    return;
+                }
+                post.setComments(comments);
+                Log.i(TAG, "Comments for: " + post.getCaption() + " are " + post.getComments().toString());
             }
         });
     }

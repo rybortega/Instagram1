@@ -1,10 +1,6 @@
 package com.codepath.teleroid.fragments;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
-import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -23,12 +19,11 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.bumptech.glide.Glide;
-import com.codepath.teleroid.PostDetailsActivity;
+import com.codepath.teleroid.activities.PostDetailsActivity;
 import com.codepath.teleroid.R;
 import com.codepath.teleroid.adapters.PreviewPostsAdapter;
 import com.codepath.teleroid.databinding.FragmentProfileBinding;
 import com.codepath.teleroid.models.Post;
-import com.codepath.teleroid.utilities.BitmapManipulations;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
@@ -39,7 +34,6 @@ import com.parse.SaveCallback;
 import org.parceler.Parcels;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
