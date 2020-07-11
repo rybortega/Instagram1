@@ -63,12 +63,25 @@ public class CommentActivity extends AppCompatActivity {
         String caption = resources.getString(R.string.caption_preview, post.getUser().getUsername(), post.getCaption());
         binding.postCaption.setText(caption);
 
+        //Listener
+        binding.postButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(binding.inputComment.getText().toString().trim().equals("") || binding.inputComment.getText() == null){
+                    Toast.makeText(CommentActivity.this, "Comment can't be empty", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                String newCommentBody = binding.inputComment.getText().toString();
+                appendComment(post, newCommentBody);
+            }
+        });
     }
 
-    private void appendComment(Post post){
-        Comment newComment = new Comment();
+    private void appendComment(Post post, String body){
+        final Comment newComment = new Comment();
         newComment.setAuthor(ParseUser.getCurrentUser());
         newComment.setTarget(post);
+        newComment.setBody(body);
         newComment.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
@@ -77,10 +90,11 @@ public class CommentActivity extends AppCompatActivity {
                     Toast.makeText(CommentActivity.this, "Error leaving comment", Toast.LENGTH_SHORT);
                     return;
                 }
-
                 Log.e(TAG, "User commented on a post!");
+                binding.inputComment.setText("");
+                commentsInPost.add(0, newComment);
+                commentsAdapter.notifyItemInserted(0);
             }
         });
-
     }
 }

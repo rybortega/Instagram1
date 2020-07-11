@@ -40,7 +40,7 @@ public class Comment extends ParseObject {
         put(KEY_TARGET, post);
     }
 
-    public void setTarget(String body){
+    public void setBody(String body){
         put(KEY_BODY, body);
     }
 }
