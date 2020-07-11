@@ -1,13 +1,17 @@
 package com.codepath.teleroid.login;
 
 import android.content.Intent;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
+import com.codepath.teleroid.R;
 import com.codepath.teleroid.activities.MainActivity;
 import com.codepath.teleroid.databinding.ActivityLoginBinding;
 import com.parse.LogInCallback;
@@ -20,6 +24,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private ActivityLoginBinding binding;
 
+    AnimationDrawable animationDrawable;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -27,6 +32,11 @@ public class LoginActivity extends AppCompatActivity {
         binding = ActivityLoginBinding.inflate(getLayoutInflater());
         View loginView = binding.getRoot();
         setContentView(loginView);
+
+        //Start background animation
+        animationDrawable = (AnimationDrawable) binding.container.getBackground();
+        animationDrawable.setEnterFadeDuration(5000);
+        animationDrawable.setExitFadeDuration(2000);
 
         if(ParseUser.getCurrentUser() != null){
             startMainActivity();
@@ -87,6 +97,20 @@ public class LoginActivity extends AppCompatActivity {
     private void startMainActivity() {
         Intent mainActivity = new Intent(this, MainActivity.class);
         startActivity(mainActivity);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (animationDrawable != null && !animationDrawable.isRunning())
+            animationDrawable.start();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (animationDrawable != null && animationDrawable.isRunning())
+            animationDrawable.stop();
     }
 
 }

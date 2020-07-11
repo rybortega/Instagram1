@@ -9,7 +9,16 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
-    tools:context=".login.RegisterActivity">
+    tools:context=".login.RegisterActivity"
+    android:background="@drawable/animation_list_register">
+
+    <ImageView
+        android:layout_width="154dp"
+        android:layout_height="53dp"
+        android:src="@drawable/nux_dayone_landing_logo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <EditText
         android:id="@+id/usernameField"
@@ -19,6 +28,7 @@
         android:layout_marginTop="96dp"
         android:layout_marginEnd="24dp"
         android:hint="@string/prompt_email"
+        android:textColorHint="@color/light_grey"
         android:inputType="textEmailAddress"
         android:selectAllOnFocus="true"
         app:layout_constraintEnd_toEndOf="parent"
@@ -33,6 +43,7 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="24dp"
         android:hint="@string/prompt_password"
+        android:textColorHint="@color/light_grey"
         android:imeActionLabel="@string/action_sign_in_short"
         android:imeOptions="actionDone"
         android:inputType="textPassword"
@@ -56,7 +67,9 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/passwordField"
-        app:layout_constraintVertical_bias="0.2" />
+        app:layout_constraintVertical_bias="0.2"
+        android:background="@android:color/holo_blue_dark"
+        android:textColor="@android:color/white"/>
 
     <RelativeLayout
         android:id="@+id/registerOptionContainer"
@@ -77,6 +90,7 @@
             android:layout_marginTop="16dp"
             android:layout_marginEnd="24dp"
             android:layout_marginBottom="4dp"
+            android:textColor="@android:color/white"
             android:text="@string/already_account" />
 
         <TextView

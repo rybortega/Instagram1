@@ -2,6 +2,7 @@ package com.codepath.teleroid.adapters;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -63,7 +64,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.ViewHo
             try {
                 commentBody = resources.getString(R.string.comment_preview, comment.getAuthor().fetchIfNeeded().getUsername(), comment.getBody());
             } catch (ParseException e) {
-                e.printStackTrace();
+                Log.e(TAG, "Couldn't fetch comment");
                 commentBody="";
             }
             binding.body.setText(commentBody);

@@ -2,6 +2,7 @@ package com.codepath.teleroid.login;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -22,6 +23,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     private ActivityRegisterBinding binding;
 
+    AnimationDrawable animationDrawable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +31,11 @@ public class RegisterActivity extends AppCompatActivity {
         binding = ActivityRegisterBinding.inflate(getLayoutInflater());
         View loginView = binding.getRoot();
         setContentView(loginView);
+
+        //Start background animation
+        animationDrawable = (AnimationDrawable) binding.container.getBackground();
+        animationDrawable.setEnterFadeDuration(2000);
+        animationDrawable.setExitFadeDuration(5000);
 
         progressDialog = new ProgressDialog(RegisterActivity.this);
 
@@ -84,10 +91,22 @@ public class RegisterActivity extends AppCompatActivity {
         });
     }
 
-
-
     private void startLoginActivity() {
         Intent loginActivity = new Intent(this, LoginActivity.class);
         startActivity(loginActivity);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (animationDrawable != null && !animationDrawable.isRunning())
+            animationDrawable.start();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (animationDrawable != null && animationDrawable.isRunning())
+            animationDrawable.stop();
     }
 }

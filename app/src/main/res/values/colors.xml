@@ -3,5 +3,10 @@
     <color name="colorPrimary">#D62976</color>
     <color name="colorPrimaryDark">#962fbf</color>
     <color name="colorSecondary">#4f5bd5</color>
-    <color name="colorAccent">#feda75</color>
+    <color name="colorHighlight">#feda75</color>
+    <color name="fb_navy">#3F51B5</color>
+    <color name="fb_cyan">#2196F3</color>
+    <color name="colorAccent">@android:color/holo_blue_dark</color>
+
+    <color name="light_grey">#CDCDCD</color>
 </resources>
