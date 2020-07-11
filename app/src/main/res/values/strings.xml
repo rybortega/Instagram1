@@ -21,6 +21,7 @@
     <string name="single_like">%1$s likes this</string>
     <string name="comment_preview"><b>%1$s:</b> %2$s</string>
     <string name="view_all_comments">View all %1$d comments</string>
+    <string name="comment_hint">Add a comment...</string>
     <plurals name="multiple_likes">
         <item quantity="one">%1$s and %2$d other like this</item>
         <item quantity="other">%1$s and %2$d others like this</item>

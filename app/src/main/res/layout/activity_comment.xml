@@ -1,9 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activities.CommentActivity">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <TextView
+        android:id="@+id/postCaption"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:text="@tools:sample/lorem[100]"
+        android:inputType="textMultiLine"
+        android:maxLines="3"
+        android:ellipsize="end"
+        android:layout_margin="16dp"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/commentsRecycler"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_below="@id/postCaption"
+        android:layout_marginHorizontal="16dp"
+        android:layout_above="@id/inputContainer"/>
+
+    <RelativeLayout
+        android:id="@+id/inputContainer"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:paddingTop="5dp"
+        android:paddingBottom="10dp"
+        android:paddingLeft="0dp"
+        android:paddingRight="0dp"
+        android:layout_height="wrap_content" >
+
+        <EditText
+            android:id="@+id/inputComment"
+            android:layout_toLeftOf="@+id/postButton"
+            android:layout_alignBottom="@+id/postButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="top"
+            android:hint="@string/comment_hint"
+            android:inputType="textShortMessage"
+            android:imeOptions="actionSend"
+            android:layout_marginStart="16dp"/>
+        <Button
+            android:id="@+id/postButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:paddingRight="10dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginEnd="16dp"
+            android:text="@string/post"
+            android:textSize="18sp"/>
+
+    </RelativeLayout>
+
+</RelativeLayout>

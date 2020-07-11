@@ -5,7 +5,10 @@ import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
 
+import org.parceler.Parcel;
+
 @ParseClassName("Like")
+@Parcel(analyze={Like.class})
 public class Like extends ParseObject{
 
     //Keys for the names of each of the attributes of the Parse entity.

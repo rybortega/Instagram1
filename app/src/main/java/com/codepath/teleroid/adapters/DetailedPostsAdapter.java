@@ -37,10 +37,16 @@ public class DetailedPostsAdapter extends RecyclerView.Adapter<DetailedPostsAdap
 
     private Context context;
     private List<Post> posts;
+    private OnClickListener clickListener;
 
-    public DetailedPostsAdapter(Context context, List<Post> posts){
+    public interface  OnClickListener{
+        void onItemClick(int position);
+    }
+
+    public DetailedPostsAdapter(Context context, List<Post> posts, OnClickListener clickListener){
         this.context = context;
         this.posts = posts;
+        this.clickListener = clickListener;
     }
 
     // Clean all elements of the recycler
@@ -200,7 +206,7 @@ public class DetailedPostsAdapter extends RecyclerView.Adapter<DetailedPostsAdap
             List<Comment> comments = post.getComments();
 
             //Comment button listener
-            binding.actionLike.setOnClickListener(new View.OnClickListener() {
+            binding.seeMoreButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
 
@@ -208,6 +214,7 @@ public class DetailedPostsAdapter extends RecyclerView.Adapter<DetailedPostsAdap
                             CommentActivity.class);
 
                     commentOnPostIntent.putExtra("post_object", Parcels.wrap(post));
+                    commentOnPostIntent.putExtra("comments_array", Parcels.wrap(post.getComments()));
                     context.startActivity(commentOnPostIntent);
                 }
             });
@@ -232,7 +239,6 @@ public class DetailedPostsAdapter extends RecyclerView.Adapter<DetailedPostsAdap
                     binding.commentPreview.setVisibility(View.GONE);
                 }
 
-                //TODO: FIX THESE
                 String commentText = resources.getString(R.string.comment_preview, nameAuthorOfComment, bodyOfComment);
                 binding.commentPreview.setText(commentText);
 

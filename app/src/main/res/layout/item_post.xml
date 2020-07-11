@@ -125,7 +125,6 @@
         android:inputType="textMultiLine"
         android:maxLines="3"
         android:paddingVertical="4dp"
-        android:textSize="14dp"
         tools:text="@tools:sample/lorem[100]"/>
 
     <TextView
@@ -134,7 +133,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/postCaption"
         android:layout_alignStart="@+id/postCaption"
-        tools:text="@string/ViewAllComments"
+        tools:text="@string/view_all_comments"
         android:textColor="@android:color/holo_blue_light"
         android:clickable="true"/>
 

@@ -1,5 +1,6 @@
 package com.codepath.teleroid.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -25,6 +26,8 @@ import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+
+import org.parceler.Parcels;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,12 +65,18 @@ public class HomeFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        DetailedPostsAdapter.OnClickListener onClickListener = new DetailedPostsAdapter.OnClickListener(){
+            @Override
+            public void onItemClick(int position) {
+
+            }
+        };
+
         posts = new ArrayList<>();
-        detailedPostsAdapter = new DetailedPostsAdapter(getContext(), posts);
+        detailedPostsAdapter = new DetailedPostsAdapter(getContext(), posts, onClickListener);
         linearLayoutManager = new LinearLayoutManager(getContext());
         binding.postsRecycler.setAdapter(detailedPostsAdapter);
         binding.postsRecycler.setLayoutManager(linearLayoutManager);
-
 
         queryPosts();
 

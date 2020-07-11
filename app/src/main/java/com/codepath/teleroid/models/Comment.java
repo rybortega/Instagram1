@@ -4,7 +4,10 @@ import com.parse.ParseClassName;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
 
+import org.parceler.Parcel;
+
 @ParseClassName("Comment")
+@Parcel(analyze={Comment.class})
 public class Comment extends ParseObject {
 
     //Keys for the names of each of the attributes of the Parse entity.
