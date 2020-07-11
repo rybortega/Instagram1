@@ -97,7 +97,8 @@ public class DetailedPostsAdapter extends RecyclerView.Adapter<DetailedPostsAdap
 
             Resources resources = context.getResources();
 
-            binding.postCaption.setText(post.getCaption());
+            String caption = resources.getString(R.string.caption_preview, post.getUser().getUsername(), post.getCaption());
+            binding.postCaption.setText(caption);
             binding.profileHandle.setText(post.getUser().getUsername());
 
             //Timestamp

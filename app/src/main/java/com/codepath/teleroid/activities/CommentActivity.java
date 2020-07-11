@@ -3,12 +3,14 @@ package com.codepath.teleroid.activities;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.bumptech.glide.load.engine.Resource;
 import com.codepath.teleroid.R;
 import com.codepath.teleroid.adapters.CommentsAdapter;
 import com.codepath.teleroid.adapters.DetailedPostsAdapter;
@@ -57,12 +59,13 @@ public class CommentActivity extends AppCompatActivity {
         binding.commentsRecycler.setLayoutManager(linearLayoutManager);
 
         //Set data into views
-        binding.postCaption.setText(post.getCaption());
+        Resources resources = CommentActivity.this.getResources();
+        String caption = resources.getString(R.string.caption_preview, post.getUser().getUsername(), post.getCaption());
+        binding.postCaption.setText(caption);
 
     }
 
     private void appendComment(Post post){
-
         Comment newComment = new Comment();
         newComment.setAuthor(ParseUser.getCurrentUser());
         newComment.setTarget(post);

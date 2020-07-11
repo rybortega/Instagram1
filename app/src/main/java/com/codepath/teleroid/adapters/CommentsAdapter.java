@@ -1,16 +1,20 @@
 package com.codepath.teleroid.adapters;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.codepath.teleroid.R;
+import com.codepath.teleroid.activities.CommentActivity;
 import com.codepath.teleroid.databinding.ItemCommentBinding;
 import com.codepath.teleroid.databinding.ItemPostBinding;
 import com.codepath.teleroid.models.Comment;
 import com.codepath.teleroid.models.Post;
+import com.parse.ParseException;
 
 import java.util.List;
 
@@ -54,7 +58,15 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.ViewHo
         }
 
         public void bind(Comment comment) {
-            binding.body.setText(comment.getBody());
+            Resources resources = context.getResources();
+            String commentBody = null;
+            try {
+                commentBody = resources.getString(R.string.comment_preview, comment.getAuthor().fetchIfNeeded().getUsername(), comment.getBody());
+            } catch (ParseException e) {
+                e.printStackTrace();
+                commentBody="";
+            }
+            binding.body.setText(commentBody);
         }
     }
 }

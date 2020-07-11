@@ -19,6 +19,7 @@
     <string name="login">Log in</string>
     <string name="gallery">Select Gallery</string>
     <string name="single_like">%1$s likes this</string>
+    <string name="caption_preview"><b>%1$s:</b> %2$s</string>
     <string name="comment_preview"><b>%1$s:</b> %2$s</string>
     <string name="view_all_comments">View all %1$d comments</string>
     <string name="comment_hint">Add a comment...</string>
