@@ -41,7 +41,7 @@ The following **additional** features are implemented:
 
 Here's a walkthrough of implemented user stories:
 <p align="center">
-  <img src="demo/teleroid_demo.gif" width="1000">
+  <img src="demo/teleroid_demo.gif" width="300">
 </p>
 
 ## Notes
@@ -50,6 +50,7 @@ Describe any challenges encountered while building the app:
 
 - Dealing with Parse for the first time presented a new learning curve.
 - Manipulating images to rotate/resize or write/read from directory was tricky.
+- Had trouble logging in through the emulator (works perfectly on physical devices though) and therefore spent quite some time recording a GIF.
 
 ## License
 
