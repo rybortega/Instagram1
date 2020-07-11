@@ -35,8 +35,8 @@ public class LoginActivity extends AppCompatActivity {
 
         //Start background animation
         animationDrawable = (AnimationDrawable) binding.container.getBackground();
-        animationDrawable.setEnterFadeDuration(5000);
-        animationDrawable.setExitFadeDuration(2000);
+        animationDrawable.setEnterFadeDuration(2000);
+        animationDrawable.setExitFadeDuration(5000);
 
         if(ParseUser.getCurrentUser() != null){
             startMainActivity();

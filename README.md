@@ -2,7 +2,7 @@
 
 **Teleroid** is a photo sharing app using Parse as its backend.
 
-Time spent: **4** hours spent in total
+Time spent: **30** hours spent in total
 
 ## User Stories
 
@@ -35,23 +35,21 @@ The following **stretch** features are implemented:
 
 The following **additional** features are implemented:
 
-- [ ] List anything else that you can get done to improve the app functionality!
+- [x] Animated background for login/register activities
 
 ## Video Walkthrough
 
 Here's a walkthrough of implemented user stories:
-
-
-## Credits
-
-List an 3rd party libraries, icons, graphics, or other assets you used in your app.
-
-- [Android Async Http Client](http://loopj.com/android-async-http/) - networking library
-
+<p align="center">
+  <img src="demo/teleroid_demo.gif" width="1000">
+</p>
 
 ## Notes
 
-Describe any challenges encountered while building the app.
+Describe any challenges encountered while building the app:
+
+- Dealing with Parse for the first time presented a new learning curve.
+- Manipulating images to rotate/resize or write/read from directory was tricky.
 
 ## License
 

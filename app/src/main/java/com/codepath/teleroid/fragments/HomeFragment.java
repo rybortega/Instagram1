@@ -82,10 +82,10 @@ public class HomeFragment extends Fragment {
 
         //Swipe Refresh loading indicator colors
         binding.swipeRefreshContainer.setColorSchemeResources(
-                R.color.colorAccent,
                 R.color.colorPrimary,
                 R.color.colorPrimaryDark,
-                R.color.colorSecondary);
+                R.color.colorSecondary,
+                R.color.colorAccent);
 
         //Swipe Refresh listener
         binding.swipeRefreshContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
