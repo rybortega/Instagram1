@@ -13,21 +13,23 @@ import org.parceler.Parcels;
 
 public class SomeonesProfileActivity extends MainActivity {
 
-    ParseUser someUser;
-    Post usersPost;
-    Fragment profileFragment;
+  ParseUser someUser;
+  Post usersPost;
+  Fragment profileFragment;
 
+  @Override
+  protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    // Getting parcel delivered from last Activity
+    usersPost = (Post) Parcels.unwrap(getIntent().getParcelableExtra("post_object"));
+    someUser = usersPost.getUser();
+    Log.d(TAG, "Showing profile for: " + someUser.getUsername());
 
-        //Getting parcel delivered from last Activity
-        usersPost = (Post) Parcels.unwrap(getIntent().getParcelableExtra("post_object"));
-        someUser = usersPost.getUser();
-        Log.d(TAG, "Showing profile for: " + someUser.getUsername());
-
-        profileFragment = new ProfileFragment(someUser);
-        fragmentManager.beginTransaction().replace(binding.frameContainer.getId(), profileFragment).commit();
-    }
+    profileFragment = new ProfileFragment(someUser);
+    fragmentManager
+        .beginTransaction()
+        .replace(binding.frameContainer.getId(), profileFragment)
+        .commit();
+  }
 }

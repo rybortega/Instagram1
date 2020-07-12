@@ -25,67 +25,65 @@ import org.parceler.Parcels;
 
 public class PostDetailsActivity extends AppCompatActivity {
 
-    public static final String TAG = PostDetailsActivity.class.getSimpleName(); //logging purposes
+  public static final String TAG = PostDetailsActivity.class.getSimpleName(); // logging purposes
 
-    private ActivityPostDetailsBinding binding;
-    private BottomNavigationView bottomMenu;
+  private ActivityPostDetailsBinding binding;
+  private BottomNavigationView bottomMenu;
 
-    private Post selectedPost;
+  private Post selectedPost;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        binding = ActivityPostDetailsBinding.inflate(getLayoutInflater());
-        View mainView = binding.getRoot();
-        setContentView(mainView);
+  @Override
+  protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    binding = ActivityPostDetailsBinding.inflate(getLayoutInflater());
+    View mainView = binding.getRoot();
+    setContentView(mainView);
 
-        //BOTTOM NAVIGATION
-        bottomMenu = findViewById(R.id.bottom_toolbar);
-        // Set default selection
-        bottomMenu.setSelectedItemId(R.id.actionProfile);
-        //Bottom Menu options listener TODO: Make bottom navigation work from details activity
-        bottomMenu.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                Fragment fragment;
-                switch (item.getItemId()) {
-                    case R.id.actionHome:
-                        fragment = new HomeFragment();
-                        break;
-                    case R.id.actionCreate:
-                        fragment = new CreateFragment();
-                        break;
-                    case R.id.actionProfile:
-                        fragment = new ProfileFragment(ParseUser.getCurrentUser());
-                        break;
-                    default:
-                        bottomMenu.setSelectedItemId(R.id.actionHome);
-                        fragment = new CreateFragment(); //TODO: better logic for default case.
-                        break;
-                }
-                //fragmentManager.beginTransaction().replace(binding.frameContainer.getId(), fragment).commit();
-                return true;
+    // BOTTOM NAVIGATION
+    bottomMenu = findViewById(R.id.bottom_toolbar);
+    // Set default selection
+    bottomMenu.setSelectedItemId(R.id.actionProfile);
+    // Bottom Menu options listener TODO: Make bottom navigation work from details activity
+    bottomMenu.setOnNavigationItemSelectedListener(
+        new BottomNavigationView.OnNavigationItemSelectedListener() {
+          @Override
+          public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            Fragment fragment;
+            switch (item.getItemId()) {
+              case R.id.actionHome:
+                fragment = new HomeFragment();
+                break;
+              case R.id.actionCreate:
+                fragment = new CreateFragment();
+                break;
+              case R.id.actionProfile:
+                fragment = new ProfileFragment(ParseUser.getCurrentUser());
+                break;
+              default:
+                bottomMenu.setSelectedItemId(R.id.actionHome);
+                fragment = new CreateFragment(); // TODO: better logic for default case.
+                break;
             }
+            // fragmentManager.beginTransaction().replace(binding.frameContainer.getId(),
+            // fragment).commit();
+            return true;
+          }
         });
 
-        //Getting parcel delivered from last Activity
-        selectedPost = (Post) Parcels.unwrap(getIntent().getParcelableExtra("post_object"));
-        Log.d(TAG, "Showing details for: " + selectedPost.getCaption());
+    // Getting parcel delivered from last Activity
+    selectedPost = (Post) Parcels.unwrap(getIntent().getParcelableExtra("post_object"));
+    Log.d(TAG, "Showing details for: " + selectedPost.getCaption());
 
-        //Setting Views to corresponding post
-        binding.postCaption.setText(selectedPost.getCaption());
-        binding.profileHandle.setText(selectedPost.getUser().getUsername());
+    // Setting Views to corresponding post
+    binding.postCaption.setText(selectedPost.getCaption());
+    binding.profileHandle.setText(selectedPost.getUser().getUsername());
 
-        String relativeDate = DateUtility.getRelativeTimeAgo(selectedPost);
-        binding.timestamp.setText(relativeDate);
+    String relativeDate = DateUtility.getRelativeTimeAgo(selectedPost);
+    binding.timestamp.setText(relativeDate);
 
-
-        ParseFile image = selectedPost.getImage();
-        if(image != null){
-            Glide.with(this)
-                    .load(selectedPost.getImage().getUrl())
-                    .into(binding.postPhoto);
-        }
-
+    ParseFile image = selectedPost.getImage();
+    if (image != null) {
+      Glide.with(this).load(selectedPost.getImage().getUrl()).into(binding.postPhoto);
     }
+  }
 }

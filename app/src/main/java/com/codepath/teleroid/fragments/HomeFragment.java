@@ -32,182 +32,185 @@ import org.parceler.Parcels;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * A simple {@link Fragment} subclass.
- */
+/** A simple {@link Fragment} subclass. */
 public class HomeFragment extends Fragment {
 
-    public static final String TAG = HomeFragment.class.getSimpleName(); //logging purposes
+  public static final String TAG = HomeFragment.class.getSimpleName(); // logging purposes
 
-    public static final int NUMBER_OF_POSTS_TO_LOAD = 4;
+  public static final int NUMBER_OF_POSTS_TO_LOAD = 4;
 
-    private FragmentHomeBinding binding;
+  private FragmentHomeBinding binding;
 
-    private List<Post> posts;
-    private DetailedPostsAdapter detailedPostsAdapter;
-    private EndlessRecyclerViewScrollListener scrollListener;
-    private LinearLayoutManager linearLayoutManager;
+  private List<Post> posts;
+  private DetailedPostsAdapter detailedPostsAdapter;
+  private EndlessRecyclerViewScrollListener scrollListener;
+  private LinearLayoutManager linearLayoutManager;
 
+  public HomeFragment() {
+    // Required empty public constructor
+  }
 
-    public HomeFragment() {
-        // Required empty public constructor
-    }
+  @Override
+  public View onCreateView(
+      LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    binding = FragmentHomeBinding.inflate(getLayoutInflater(), container, false);
+    View view = binding.getRoot();
+    return view;
+  }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        binding = FragmentHomeBinding.inflate(getLayoutInflater(), container, false);
-        View view = binding.getRoot();
-        return view;
-    }
+  @Override
+  public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+    super.onViewCreated(view, savedInstanceState);
 
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-        DetailedPostsAdapter.OnClickListener onClickListener = new DetailedPostsAdapter.OnClickListener(){
-            @Override
-            public void onItemClick(int position) {
-
-            }
+    DetailedPostsAdapter.OnClickListener onClickListener =
+        new DetailedPostsAdapter.OnClickListener() {
+          @Override
+          public void onItemClick(int position) {}
         };
 
-        posts = new ArrayList<>();
-        detailedPostsAdapter = new DetailedPostsAdapter(getContext(), posts, onClickListener);
-        linearLayoutManager = new LinearLayoutManager(getContext());
-        binding.postsRecycler.setAdapter(detailedPostsAdapter);
-        binding.postsRecycler.setLayoutManager(linearLayoutManager);
+    posts = new ArrayList<>();
+    detailedPostsAdapter = new DetailedPostsAdapter(getContext(), posts, onClickListener);
+    linearLayoutManager = new LinearLayoutManager(getContext());
+    binding.postsRecycler.setAdapter(detailedPostsAdapter);
+    binding.postsRecycler.setLayoutManager(linearLayoutManager);
 
-        queryPosts();
+    queryPosts();
 
-        //Swipe Refresh loading indicator colors
-        binding.swipeRefreshContainer.setColorSchemeResources(
-                R.color.colorPrimary,
-                R.color.colorPrimaryDark,
-                R.color.colorSecondary,
-                R.color.colorAccent);
+    // Swipe Refresh loading indicator colors
+    binding.swipeRefreshContainer.setColorSchemeResources(
+        R.color.colorPrimary,
+        R.color.colorPrimaryDark,
+        R.color.colorSecondary,
+        R.color.colorAccent);
 
-        //Swipe Refresh listener
-        binding.swipeRefreshContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                Log.d(TAG, "Refresh: Fetching fresh data!");
+    // Swipe Refresh listener
+    binding.swipeRefreshContainer.setOnRefreshListener(
+        new SwipeRefreshLayout.OnRefreshListener() {
+          @Override
+          public void onRefresh() {
+            Log.d(TAG, "Refresh: Fetching fresh data!");
 
-                //Clears and repopulates
-                queryPosts();
+            // Clears and repopulates
+            queryPosts();
 
-                //Reset endless scroller state
-                scrollListener.resetState();
+            // Reset endless scroller state
+            scrollListener.resetState();
 
-                //Turn off the reload signal
-                binding.swipeRefreshContainer.setRefreshing(false);
-            }
+            // Turn off the reload signal
+            binding.swipeRefreshContainer.setRefreshing(false);
+          }
         });
 
-        scrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
-            @Override
-            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                // Triggered only when new data needs to be appended to the list
-                // Add whatever code is needed to append new items to the bottom of the list
-                Log.i(TAG, "Gotta retrieve more! To page: " + page);
-                queryMorePosts(page);
-            }
+    scrollListener =
+        new EndlessRecyclerViewScrollListener(linearLayoutManager) {
+          @Override
+          public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+            // Triggered only when new data needs to be appended to the list
+            // Add whatever code is needed to append new items to the bottom of the list
+            Log.i(TAG, "Gotta retrieve more! To page: " + page);
+            queryMorePosts(page);
+          }
         };
-        // Adds the scroll listener to RecyclerView
-        binding.postsRecycler.addOnScrollListener(scrollListener);
-    }
+    // Adds the scroll listener to RecyclerView
+    binding.postsRecycler.addOnScrollListener(scrollListener);
+  }
 
-    protected void queryPosts() {
-        Log.i(TAG, "Retrieving posts...");
-        ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
-        query.include(Post.KEY_USER);
-        query.setLimit(NUMBER_OF_POSTS_TO_LOAD); //Limits number of results.
-        query.addDescendingOrder(Post.KEY_TIME);
-        query.findInBackground(new FindCallback<Post>() {
-            @Override
-            public void done(List<Post> newPosts, ParseException e) {
-                if (e != null) {
-                    Log.e(TAG, "Couldn't query posts: " + e);
-                    return;
-                }
-
-                //Fetch likes and comments
-                for(Post post : newPosts) {
-                    fetchLikes(post);
-                    fetchComments(post);
-                }
-
-                Log.i(TAG, "Posts retrieved successfully!");
-                detailedPostsAdapter.clear();
-                detailedPostsAdapter.addAll(newPosts);
+  protected void queryPosts() {
+    Log.i(TAG, "Retrieving posts...");
+    ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
+    query.include(Post.KEY_USER);
+    query.setLimit(NUMBER_OF_POSTS_TO_LOAD); // Limits number of results.
+    query.addDescendingOrder(Post.KEY_TIME);
+    query.findInBackground(
+        new FindCallback<Post>() {
+          @Override
+          public void done(List<Post> newPosts, ParseException e) {
+            if (e != null) {
+              Log.e(TAG, "Couldn't query posts: " + e);
+              return;
             }
-        });
-    }
 
-    public void queryMorePosts(int offset) {
-        Log.i(TAG, "Retrieving MORE posts...");
-
-        ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
-        query.include(Post.KEY_USER);
-        query.whereLessThan(Post.KEY_TIME, posts.get(posts.size()-1).getCreatedAt());
-        query.setLimit(NUMBER_OF_POSTS_TO_LOAD);
-        query.addDescendingOrder(Post.KEY_TIME);
-        query.findInBackground(new FindCallback<Post>() {
-            @Override
-            public void done(List<Post> morePosts, ParseException e) {
-                if (e != null) {
-                    Log.e(TAG, "Couldn't query posts: " + e);
-                    return;
-                }
-
-                //Fetch likes and comments
-                for(Post post : morePosts) {
-                    fetchLikes(post);
-                    fetchComments(post);
-
-                }
-
-                Log.i(TAG, "Posts retrieved successfully!");
-                detailedPostsAdapter.addAll(morePosts);
+            // Fetch likes and comments
+            for (Post post : newPosts) {
+              fetchLikes(post);
+              fetchComments(post);
             }
-        });
-    }
 
-    public void fetchLikes(final Post post){
-        Log.i(TAG, "Trying to retrieve likes");
-        Log.i(TAG, "Retrieving likes for: " + post);
-        ParseQuery<Like> query = ParseQuery.getQuery(Like.class);
-        query.addDescendingOrder(Like.KEY_TIME);
-        query.whereEqualTo(Like.KEY_TARGET, post);
-        query.findInBackground(new FindCallback<Like>() {
-            @Override
-            public void done(List<Like> likes, ParseException e) {
-                if (e != null) {
-                    Log.e(TAG, "Couldn't query posts: " + e);
-                    return;
-                }
-                post.setLikes(likes);
-                Log.i(TAG, "Likes for: " + post.getCaption() + " are " + post.getLikes().toString());
-            }
+            Log.i(TAG, "Posts retrieved successfully!");
+            detailedPostsAdapter.clear();
+            detailedPostsAdapter.addAll(newPosts);
+          }
         });
-    }
+  }
 
-    private void fetchComments(final Post post) {
-        Log.i(TAG, "Trying to retrieve comments");
-        Log.i(TAG, "Retrieving comments for: " + post);
-        ParseQuery<Comment> query = ParseQuery.getQuery(Comment.class);
-        query.addDescendingOrder(Comment.KEY_TIME);
-        query.whereEqualTo(Comment.KEY_TARGET, post);
-        query.findInBackground(new FindCallback<Comment>() {
-            @Override
-            public void done(List<Comment> comments, ParseException e) {
-                if (e != null) {
-                    Log.e(TAG, "Couldn't query posts: " + e);
-                    return;
-                }
-                post.setComments(comments);
-                Log.i(TAG, "Comments for: " + post.getCaption() + " are " + post.getComments().toString());
+  public void queryMorePosts(int offset) {
+    Log.i(TAG, "Retrieving MORE posts...");
+
+    ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
+    query.include(Post.KEY_USER);
+    query.whereLessThan(Post.KEY_TIME, posts.get(posts.size() - 1).getCreatedAt());
+    query.setLimit(NUMBER_OF_POSTS_TO_LOAD);
+    query.addDescendingOrder(Post.KEY_TIME);
+    query.findInBackground(
+        new FindCallback<Post>() {
+          @Override
+          public void done(List<Post> morePosts, ParseException e) {
+            if (e != null) {
+              Log.e(TAG, "Couldn't query posts: " + e);
+              return;
             }
+
+            // Fetch likes and comments
+            for (Post post : morePosts) {
+              fetchLikes(post);
+              fetchComments(post);
+            }
+
+            Log.i(TAG, "Posts retrieved successfully!");
+            detailedPostsAdapter.addAll(morePosts);
+          }
         });
-    }
+  }
+
+  public void fetchLikes(final Post post) {
+    Log.i(TAG, "Trying to retrieve likes");
+    Log.i(TAG, "Retrieving likes for: " + post);
+    ParseQuery<Like> query = ParseQuery.getQuery(Like.class);
+    query.addDescendingOrder(Like.KEY_TIME);
+    query.whereEqualTo(Like.KEY_TARGET, post);
+    query.findInBackground(
+        new FindCallback<Like>() {
+          @Override
+          public void done(List<Like> likes, ParseException e) {
+            if (e != null) {
+              Log.e(TAG, "Couldn't query posts: " + e);
+              return;
+            }
+            post.setLikes(likes);
+            Log.i(TAG, "Likes for: " + post.getCaption() + " are " + post.getLikes().toString());
+          }
+        });
+  }
+
+  private void fetchComments(final Post post) {
+    Log.i(TAG, "Trying to retrieve comments");
+    Log.i(TAG, "Retrieving comments for: " + post);
+    ParseQuery<Comment> query = ParseQuery.getQuery(Comment.class);
+    query.addDescendingOrder(Comment.KEY_TIME);
+    query.whereEqualTo(Comment.KEY_TARGET, post);
+    query.findInBackground(
+        new FindCallback<Comment>() {
+          @Override
+          public void done(List<Comment> comments, ParseException e) {
+            if (e != null) {
+              Log.e(TAG, "Couldn't query posts: " + e);
+              return;
+            }
+            post.setComments(comments);
+            Log.i(
+                TAG,
+                "Comments for: " + post.getCaption() + " are " + post.getComments().toString());
+          }
+        });
+  }
 }
