@@ -2,9 +2,9 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/postPreview"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:id="@+id/postPreview"
     android:clickable="true">
 
     <ImageView

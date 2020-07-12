@@ -5,12 +5,12 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/animation_list_register"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
-    tools:context=".login.RegisterActivity"
-    android:background="@drawable/animation_list_register">
+    tools:context=".login.RegisterActivity">
 
     <ImageView
         android:layout_width="154dp"
@@ -28,9 +28,9 @@
         android:layout_marginTop="96dp"
         android:layout_marginEnd="24dp"
         android:hint="@string/prompt_email"
-        android:textColorHint="@color/light_grey"
         android:inputType="textEmailAddress"
         android:selectAllOnFocus="true"
+        android:textColorHint="@color/light_grey"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -43,11 +43,11 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="24dp"
         android:hint="@string/prompt_password"
-        android:textColorHint="@color/light_grey"
         android:imeActionLabel="@string/action_sign_in_short"
         android:imeOptions="actionDone"
         android:inputType="textPassword"
         android:selectAllOnFocus="true"
+        android:textColorHint="@color/light_grey"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/usernameField" />
@@ -61,15 +61,15 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="24dp"
         android:layout_marginBottom="64dp"
+        android:background="@android:color/holo_blue_dark"
         android:enabled="true"
         android:text="@string/action_register"
+        android:textColor="@android:color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/passwordField"
-        app:layout_constraintVertical_bias="0.2"
-        android:background="@android:color/holo_blue_dark"
-        android:textColor="@android:color/white"/>
+        app:layout_constraintVertical_bias="0.2"/>
 
     <RelativeLayout
         android:id="@+id/registerOptionContainer"
@@ -90,8 +90,8 @@
             android:layout_marginTop="16dp"
             android:layout_marginEnd="24dp"
             android:layout_marginBottom="4dp"
-            android:textColor="@android:color/white"
-            android:text="@string/already_account" />
+            android:text="@string/already_account"
+            android:textColor="@android:color/white" />
 
         <TextView
             android:id="@+id/signupButton"
@@ -99,9 +99,9 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/alredyAccountPrompt"
             android:layout_centerHorizontal="true"
+            android:clickable="true"
             android:text="@string/login"
-            android:textColor="@android:color/holo_blue_light"
-            android:clickable="true"/>
+            android:textColor="@android:color/holo_blue_light"/>
     </RelativeLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

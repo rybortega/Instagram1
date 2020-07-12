@@ -133,21 +133,21 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/postCaption"
         android:layout_alignStart="@+id/postCaption"
-        tools:text="@string/view_all_comments"
+        android:clickable="true"
         android:textColor="@android:color/holo_blue_light"
-        android:clickable="true"/>
+        tools:text="@string/view_all_comments"/>
 
     <TextView
         android:id="@+id/commentPreview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:text="@tools:sample/lorem[10]"
         android:layout_below="@id/seeMoreButton"
         android:layout_alignStart="@id/actionsContainer"
         android:layout_alignEnd="@id/actionBookmark"
-        android:paddingVertical="4dp"
+        android:ellipsize="end"
         android:maxLines="2"
-        android:ellipsize="end"/>
+        android:paddingVertical="4dp"
+        tools:text="@tools:sample/lorem[10]"/>
 
     <TextView
         android:id="@+id/timestamp"

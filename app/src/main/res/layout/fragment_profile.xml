@@ -12,55 +12,55 @@
         android:layout_below="@+id/profileInfoContainer">
 
         <RelativeLayout
+            android:id="@+id/profileContainer"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/profileContainer">
+            android:layout_height="match_parent">
 
             <RelativeLayout
+                android:id="@+id/profileInfoContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/profileInfoContainer"
                 android:padding="16dp">
 
                 <ImageView
+                    android:id="@+id/profilePicture"
                     android:layout_width="100dp"
                     android:layout_height="100dp"
-                    android:id="@+id/profilePicture"
                     tools:src="@tools:sample/avatars"/>
 
                 <LinearLayout
+                    android:id="@+id/profileStats"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:id="@+id/profileStats"
-                    android:layout_toEndOf="@+id/profilePicture"
-                    android:weightSum="3"
                     android:layout_alignTop="@id/profilePicture"
                     android:layout_alignBottom="@id/profilePicture"
-                    android:padding="16dp">
+                    android:layout_toEndOf="@+id/profilePicture"
+                    android:orientation="horizontal"
+                    android:padding="16dp"
+                    android:weightSum="3">
 
                     <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
                         android:id="@+id/numPostsContainer"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:paddingVertical="16dp">
 
                     </RelativeLayout>
 
                     <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
                         android:id="@+id/numFollowersContainer"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:paddingVertical="16dp">
 
                     </RelativeLayout>
 
                     <RelativeLayout
+                        android:id="@+id/numFollowingContainer"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:id="@+id/numFollowingContainer"
                         android:layout_weight="1"
                         android:paddingVertical="16dp">
 
@@ -73,20 +73,20 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/profilePicture"
-                    tools:text="Ivan A. Reyes"
+                    android:maxLines="1"
                     android:padding="8dp"
                     android:textStyle="bold"
-                    android:maxLines="1"/>
+                    tools:text="Ivan A. Reyes"/>
 
                 <TextView
                     android:id="@+id/displayBio"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/displayName"
-                    tools:text="@tools:sample/lorem[10]"
-                    android:paddingHorizontal="8dp"
+                    android:inputType="textMultiLine"
                     android:maxLines="3"
-                    android:inputType="textMultiLine"/>
+                    android:paddingHorizontal="8dp"
+                    tools:text="@tools:sample/lorem[10]"/>
 
             </RelativeLayout>
 
