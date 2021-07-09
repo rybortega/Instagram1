@@ -1,4 +1,4 @@
-# Project 4 - *Teleroid*
+# Project 4 - Instagram1
 
 **Teleroid** is a photo sharing app using Parse as its backend.
 
